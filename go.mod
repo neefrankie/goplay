@@ -1,3 +1,3 @@
-module gocon
+module goconcurrency
 
 go 1.18
