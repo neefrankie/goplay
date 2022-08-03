@@ -1,48 +1,48 @@
-package chapter3
+package patterns
 
 import "testing"
 
-func TestSayHello(t *testing.T) {
+func TestCancellation(t *testing.T) {
 	tests := []struct {
 		name string
 	}{
 		{
-			name: "Test SayHello",
+			name: "Cancellation",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			SayHello()
+			Cancellation()
 		})
 	}
 }
 
-func TestSalutation(t *testing.T) {
+func TestWriteBlockedLeak(t *testing.T) {
 	tests := []struct {
 		name string
 	}{
 		{
-			name: "Test Salutation",
+			name: "Write blocked leak",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			Salutation()
+			WriteBlockedLeak()
 		})
 	}
 }
 
-func TestSalutations(t *testing.T) {
+func TestCancelWriteBlocked(t *testing.T) {
 	tests := []struct {
 		name string
 	}{
 		{
-			name: "Captured value",
+			name: "Cancel write blocked",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			Salutations()
+			CancelWriteBlocked()
 		})
 	}
 }

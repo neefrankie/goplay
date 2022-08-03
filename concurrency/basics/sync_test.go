@@ -1,63 +1,63 @@
-package chapter3
+package basics
 
 import "testing"
 
-func TestSelectExample(t *testing.T) {
+func TestWaitComplete(t *testing.T) {
 	tests := []struct {
 		name string
 	}{
 		{
-			name: "Select block",
+			name: "Wait to complete",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			SelectExample()
+			WaitComplete()
 		})
 	}
 }
 
-func TestSelectDistribution(t *testing.T) {
+func TestWaitCompleteN(t *testing.T) {
 	tests := []struct {
 		name string
 	}{
 		{
-			name: "Select distribution",
+			name: "Wait an array of goroutines",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			SelectDistribution()
+			WaitCompleteN()
 		})
 	}
 }
 
-func TestSelectTimeout(t *testing.T) {
+func TestMutualExclusion(t *testing.T) {
 	tests := []struct {
 		name string
 	}{
 		{
-			name: "Select timeout",
+			name: "Test Mutex",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			SelectTimeout()
+			MutualExclusion()
 		})
 	}
 }
 
-func TestSelectSignal(t *testing.T) {
+func TestReadWriteMutex(t *testing.T) {
 	tests := []struct {
 		name string
 	}{
 		{
-			name: "Signal",
+			name: "Test Read Write Mutex",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			SelectSignal()
+			ReadWriteMutex()
 		})
 	}
 }
