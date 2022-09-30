@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"goplay/gopl/ch1"
 	"os"
-	"playground/gopl/ch1"
 )
 
 func main() {
