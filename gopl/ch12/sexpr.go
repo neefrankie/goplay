@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"reflect"
+	"text/scanner"
 )
 
 func Marshal(v interface{}) ([]byte, error) {
@@ -81,4 +82,23 @@ func encode(buf *bytes.Buffer, v reflect.Value) error {
 	}
 
 	return nil
+}
+
+type lexer struct {
+	scan  scanner.Scanner
+	token rune
+}
+
+func (lex *lexer) next() {
+	lex.token = lex.scan.Scan()
+}
+
+func (lex *lexer) text() string {
+	return lex.scan.TokenText()
+}
+
+func (lex *lexer) consume(want rune) {
+	if lex.token != want {
+		panic(fmt.Sprintf("got %q, want %q", lex.text(), want))
+	}
 }
