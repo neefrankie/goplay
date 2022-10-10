@@ -42,3 +42,8 @@ func TestMarshal(t *testing.T) {
 
 	t.Logf("%s", b)
 }
+
+func TestBits(t *testing.T) {
+	t.Logf("%b", 1<<2)
+	t.Logf("%b", 4>>2)
+}
