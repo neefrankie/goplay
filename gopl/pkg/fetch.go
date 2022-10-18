@@ -1,4 +1,4 @@
-package ch1
+package pkg
 
 import (
 	"fmt"

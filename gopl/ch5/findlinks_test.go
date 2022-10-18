@@ -2,12 +2,12 @@ package ch5
 
 import (
 	"bytes"
-	"goplay/gopl/ch1"
+	"goplay/gopl/pkg"
 	"testing"
 )
 
 func getRustHome() []byte {
-	b, err := ch1.Fetch("https://www.rust-lang.org/")
+	b, err := pkg.Fetch("https://www.rust-lang.org/")
 	if err != nil {
 		panic(err)
 	}

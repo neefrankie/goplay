@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	"goplay/gopl/ch1"
+	"goplay/gopl/pkg"
 	"os"
 )
 
 func main() {
 	for _, url := range os.Args[1:] {
-		b, err := ch1.Fetch(url)
+		b, err := pkg.Fetch(url)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%v\n", err)
 			os.Exit(1)
