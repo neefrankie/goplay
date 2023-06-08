@@ -10,7 +10,12 @@ import (
 
 func main() {
 	counts := make(map[string]int)
+	// The scanner reads from the program's standard input.
 	input := bufio.NewScanner(os.Stdin)
+	// Each call to input.Scan() reads the next line and
+	// removes the newline character from the end.
+	// The Scan function returns true if there is a line
+	// and false when there is no more input.
 	for input.Scan() {
 		counts[input.Text()]++
 	}
