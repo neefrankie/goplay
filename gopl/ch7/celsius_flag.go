@@ -3,7 +3,8 @@ package ch7
 import (
 	"flag"
 	"fmt"
-	"goplay/gopl/ch2"
+
+	"example.com/gopl/ch2"
 )
 
 type celsiusFlag struct {

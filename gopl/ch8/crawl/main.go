@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"goplay/gopl/ch5/links"
 	"log"
 	"os"
+
+	"example.com/gopl/ch5/links"
 )
 
 var tokens = make(chan struct{}, 20)

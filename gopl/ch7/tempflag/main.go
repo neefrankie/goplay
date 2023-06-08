@@ -3,7 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"goplay/gopl/ch7"
+
+	"example.com/gopl/ch7"
 )
 
 var temp = ch7.CelsiusFlag("temp", 20.0, "the temperature")
