@@ -6,4 +6,6 @@ use (
 	./gopl
 	./hello
 	./html
+	./pongodemo
+	./stdtmpl
 )
