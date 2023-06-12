@@ -1,10 +1,13 @@
 go 1.20
 
 use (
+	./dbdemo
 	./example
 	./fetch
 	./fuzz
 	./gopl
 	./hello
 	./html
+	./pongodemo
+	./stdtmpl
 )
