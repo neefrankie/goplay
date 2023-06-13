@@ -1,6 +1,9 @@
 package array
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 func checkIfExist(arr []int) bool {
 	l := len(arr)
@@ -103,28 +106,49 @@ func validMountainArray2(arr []int) bool {
 // Input: nums = [2,2,3,1]
 // Output: 1
 func thirdMax(nums []int) int {
-	first := -1
-	second := -1
-	third := -1
+	sort.Sort(sort.Reverse(sort.IntSlice(nums)))
 
-	for i := 0; i < len(nums); i++ {
-		if nums[i] >= first {
-			third = second
-			second = first
-			first = nums[i]
-		} else if nums[i] >= second {
-			third = second
-			second = nums[i]
-		} else if nums[i] >= third {
-			third = nums[i]
+	l := len(nums)
+	if l < 3 {
+		return nums[0]
+	}
+
+	// 3, 2, 2, 1
+	count := 1
+	for i := 1; i < l; i++ {
+		if nums[i-1] != nums[i] {
+			count++
+		}
+
+		if count == 3 {
+			return nums[i]
 		}
 	}
 
-	fmt.Printf("%d, %d, %d", first, second, third)
+	return nums[0]
+}
 
-	if third > -1 {
-		return third
-	} else {
-		return first
+// Given an array nums of n integers where nums[i] is in the range [1, n],
+// return an array of all the integers in the range [1, n] that do not appear in nums.
+// Input: nums = [4,3,2,7,8,2,3,1]
+// Output: [5,6]
+// Reference: Section 8.2 Counting Sort, Chapter 8, Introduction to Algorithms
+func findDisappearedNumbers(nums []int) []int {
+	l := len(nums)
+	counter := make([]int, l+1)
+
+	for _, v := range nums {
+		counter[v] = counter[v] + 1
 	}
+
+	fmt.Printf("%v", counter)
+
+	out := make([]int, 0)
+	for i := 1; i < len(counter); i++ {
+		if counter[i] == 0 {
+			out = append(out, i)
+		}
+	}
+
+	return out
 }

@@ -106,3 +106,28 @@ func removeElement(nums []int, val int) int {
 
 	return lastSeen
 }
+
+// Given an integer array nums sorted in non-decreasing order,
+// return an array of the squares of each number sorted in non-decreasing order.
+// Input: nums = [-4,-1,0,3,10]
+// Output:       [0,1,9,16,100]
+func sortedSquares(nums []int) []int {
+	left := 0
+	l := len(nums)
+	right := l - 1
+	out := make([]int, l)
+
+	for i := l - 1; i >= 0; i-- {
+		lv := nums[left] * nums[left]
+		rv := nums[right] * nums[right]
+		if lv > rv {
+			out[i] = lv
+			left++
+		} else {
+			out[i] = rv
+			right--
+		}
+	}
+
+	return out
+}
