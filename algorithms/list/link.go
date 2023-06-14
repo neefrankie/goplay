@@ -23,14 +23,17 @@ func (l *Link[T]) FindMiddle() *Link[T] {
 	return middle
 }
 
-type DoublyLink[T interface{}] struct {
-	item     T
-	next     *DoublyLink[T]
-	previous *DoublyLink[T]
-}
+func Reverse[T interface{}](link *Link[T]) *Link[T] {
 
-func NewDoublyLink[T interface{}](item T) *DoublyLink[T] {
-	return &DoublyLink[T]{
-		item: item,
+	var current = link
+	var previous *Link[T]
+
+	for current != nil {
+		temp := current.next
+		current.next = previous
+		previous = current
+		current = temp
 	}
+
+	return previous
 }
