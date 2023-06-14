@@ -202,3 +202,67 @@ func removeNthFromEnd(head *ListNode, n int) *ListNode {
 
 	return head
 }
+
+func removeElements(head *ListNode, val int) *ListNode {
+	if head == nil {
+		return nil
+	}
+
+	dummy := &ListNode{}
+	dummy.Next = head
+	prev := dummy
+	cur := head
+
+	for cur != nil {
+		if cur.Val == val {
+			prev.Next = cur.Next
+		} else {
+			prev = cur
+		}
+
+		cur = cur.Next
+	}
+
+	return dummy.Next
+}
+
+func removeElementsRec(head *ListNode, val int) *ListNode {
+	if head == nil {
+		return nil
+	}
+
+	head.Next = removeElementsRec(head.Next, val)
+
+	if head.Val == val {
+		return head.Next
+	}
+
+	return head
+}
+
+func oddEvenList(head *ListNode) *ListNode {
+	var oddHead = &ListNode{}
+	var oddTail = oddHead
+	var evenHead = &ListNode{}
+	var evenTail = evenHead
+
+	isOdd := true
+	cur := head
+	for cur != nil {
+
+		if isOdd {
+			oddTail.Next = cur
+			oddTail = oddTail.Next
+		} else {
+			evenTail.Next = cur
+			evenTail = evenTail.Next
+		}
+		isOdd = !isOdd
+		cur = cur.Next
+	}
+
+	oddTail.Next = evenHead.Next
+	evenTail.Next = nil
+
+	return oddHead.Next
+}
