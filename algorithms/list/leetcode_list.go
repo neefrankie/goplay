@@ -4,113 +4,84 @@ import "fmt"
 
 type MyLinkedList struct {
 	head *ListNode
+	size int
 }
 
 func Constructor() MyLinkedList {
-	return MyLinkedList{}
+	return MyLinkedList{
+		head: nil,
+		size: 0,
+	}
 }
 
-func (this *MyLinkedList) Get(index int) int {
-	cur := this.head
-	i := 0
-	for cur != nil && i < index {
-		cur = cur.Next
-		i++
+func (list *MyLinkedList) Get(index int) int {
+	if index < 0 || index > list.size {
+		return -1
 	}
 
-	if cur != nil {
-		return cur.Val
-	}
-
-	return -1
-}
-
-func (this *MyLinkedList) AddAtHead(val int) {
-
-	node := ListNode{Val: val, Next: nil}
-	node.Next = this.head
-
-	this.head = &node
-}
-
-func (this *MyLinkedList) AddAtTail(val int) {
-
-	if this.head == nil {
-		node := ListNode{Val: val}
-		this.head = &node
-		return
-	}
-
-	cur := this.head
-	prev := this.head
-
-	for cur != nil {
-		prev = cur
+	cur := list.head
+	for i := 0; i < list.size; i++ {
 		cur = cur.Next
 	}
 
-	node := ListNode{Val: val}
+	return cur.Val
+}
 
-	prev.Next = &node
+func (list *MyLinkedList) AddAtHead(val int) {
+	list.AddAtIndex(0, val)
+}
+
+func (list *MyLinkedList) AddAtTail(val int) {
+	list.AddAtIndex(list.size, val)
 }
 
 // Add a node of value val before the indexth node in the linked list.
 // If index equals the length of the linked list,
 // the node will be appended to the end of the linked list.
 // If index is greater than the length, the node will not be inserted.
-func (this *MyLinkedList) AddAtIndex(index int, val int) {
-	if index == 0 {
-		node := ListNode{Val: val}
-		node.Next = this.head
-		this.head = &node
+func (list *MyLinkedList) AddAtIndex(index int, val int) {
+	if index > list.size {
 		return
 	}
 
-	cur := this.head
-	prev := this.head
+	cur := list.head
+	newNode := newListNode(val)
 
-	i := 0
-	for cur != nil && i < index {
-		prev = cur
-		cur = cur.Next
-		i++
-	}
-
-	if i < index {
-		return
-	}
-
-	node := ListNode{Val: val}
-	node.Next = cur
-	prev.Next = &node
-}
-
-func (this *MyLinkedList) DeleteAtIndex(index int) {
-	if index == 0 {
-		if this.head == nil {
-			return
+	if index <= 0 {
+		newNode.Next = cur
+		list.head = newNode
+	} else {
+		for i := 0; i < index-1; i++ {
+			cur = cur.Next
 		}
-		this.head = this.head.Next
+		newNode.Next = cur.Next
+		cur.Next = newNode
+	}
+
+	list.size = list.size + 1
+}
+
+func (list *MyLinkedList) DeleteAtIndex(index int) {
+	if index < 0 || index >= list.size {
 		return
 	}
 
-	prev := this.head
-	cur := this.head
-	i := 0
+	cur := list.head
 
-	for cur != nil && i < index {
-		prev = cur
-		cur = cur.Next
-		i++
+	if index == 0 {
+		list.head = list.head.Next
+	} else {
+		for i := 0; i < index-1; i++ {
+			cur = cur.Next
+		}
+		cur.Next = cur.Next.Next
 	}
 
-	if cur != nil {
-		prev.Next = cur.Next
-	}
+	list.size = list.size - 1
 }
 
-func (this *MyLinkedList) print() {
-	cur := this.head
+func (list *MyLinkedList) print() {
+	cur := list.head
 
 	for cur != nil {
 		fmt.Printf("%d -> ", cur.Val)
