@@ -134,3 +134,75 @@ func Test_oddEvenList(t *testing.T) {
 		})
 	}
 }
+
+func Test_mergeTwoLists(t *testing.T) {
+	type args struct {
+		list1 *ListNode
+		list2 *ListNode
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{
+			name: "merge [1,3,5] with [2,4,6]",
+			args: args{
+				list1: newListNode(5).add(3).add(1),
+				list2: newListNode(6).add(4).add(2),
+			},
+			want: []int{1, 2, 3, 4, 5, 6},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := mergeTwoLists(tt.args.list1, tt.args.list2)
+
+			if !reflect.DeepEqual(got.toArray(), tt.want) {
+				t.Errorf("mergeTwoLists() = %v, want %v", got.toArray(), tt.want)
+			}
+		})
+	}
+}
+
+func Test_addTwoNumbers(t *testing.T) {
+	type args struct {
+		l1 *ListNode
+		l2 *ListNode
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{
+			name: "[3,4,2] + [4,6,5]",
+			args: args{
+				l1: newListNode(3).add(4).add(2),
+				l2: newListNode(4).add(6).add(5),
+			},
+			want: []int{7, 0, 8},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := addTwoNumbers(tt.args.l1, tt.args.l2)
+
+			if !reflect.DeepEqual(got.toArray(), tt.want) {
+				t.Errorf("addTwoNumbers() = %v, want %v", got.toArray(), tt.want)
+			}
+		})
+	}
+}
+
+func Test_flattenRec(t *testing.T) {
+	one := newNode(1).addNext(newNode(2).addNext(newNode(3).addChild(newNode(7))))
+
+	head, tail := flattenRec(one)
+
+	t.Logf("Head %d, tail %d", head.Val, tail.Val)
+
+	head.traverse(func(n *Node) {
+		t.Logf("%d", n.Val)
+	})
+}
