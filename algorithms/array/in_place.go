@@ -90,21 +90,22 @@ func sortArrayByParity(nums []int) []int {
 // Then return the number of elements in nums which are not equal to val.
 // Input:     nums = [3,2,2,3], val = 3
 // Output: 2, nums = [2,2,_,_]
+// See https://leetcode.com/explore/learn/card/array-and-string/205/array-two-pointer-technique/1157/
 func removeElement(nums []int, val int) int {
 	l := len(nums)
 	if l == 0 {
 		return 0
 	}
 
-	lastSeen := 0
-	for cur := 0; cur < l; cur++ {
-		if nums[cur] != val {
-			nums[lastSeen], nums[cur] = nums[cur], nums[lastSeen]
-			lastSeen++
+	k := 0
+	for i := 0; i < l; i++ {
+		if nums[i] != val {
+			nums[k] = nums[i]
+			k++
 		}
 	}
 
-	return lastSeen
+	return k
 }
 
 // Given an integer array nums sorted in non-decreasing order,

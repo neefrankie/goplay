@@ -10,7 +10,7 @@ func BinarySearch(x int, arr []int) int {
 		if x == arr[m] {
 			return m
 		} else if x < arr[m] {
-			j = m
+			j = m - 1
 		} else {
 			i = m + 1
 		}
