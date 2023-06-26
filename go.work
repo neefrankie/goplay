@@ -10,5 +10,6 @@ use (
 	./hello
 	./html
 	./pongodemo
+	./sb
 	./stdtmpl
 )
