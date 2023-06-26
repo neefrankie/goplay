@@ -6,6 +6,10 @@ import (
 	"gorm.io/gorm"
 )
 
+// Create db first:
+// CREATE DATABASE IF NOT EXISTS gormdb
+// CHARACTER SET utf8
+// COLLATE utf8_general_ci
 func buildDSN() string {
 	cfg := &driver.Config{
 		User:   "sampadm",
@@ -32,4 +36,14 @@ func buildDSN() string {
 func connect(dsn string) (*gorm.DB, error) {
 
 	return gorm.Open(mysql.Open(dsn), &gorm.Config{})
+}
+
+func mustConnect() *gorm.DB {
+	myDB, err := connect(buildDSN())
+
+	if err != nil {
+		panic(err)
+	}
+
+	return myDB
 }
