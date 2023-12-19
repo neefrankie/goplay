@@ -10,7 +10,7 @@ use (
 	./gopl
 	./hello
 	./html
-	./pongodemo
+	./echopongo
 	./sb
 	./stdtmpl
 )
