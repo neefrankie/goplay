@@ -12,5 +12,4 @@ use (
 	./html
 	./echopongo
 	./sb
-	./stdtmpl
 )
