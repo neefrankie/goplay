@@ -217,11 +217,12 @@ type TemplateData struct {
 	SITEURL  string
 }
 
+var data = TemplateData{
+	SITENAME: "Theory and Practice",
+	SITEURL:  "https://siongui.github.io/",
+}
+
 func TestTemplateToHtml(t *testing.T) {
-	data := TemplateData{
-		SITENAME: "Theory and Practice",
-		SITEURL:  "https://siongui.github.io/",
-	}
 
 	tmpl, err := ParseTemplateDir("templates")
 	if err != nil {
@@ -234,5 +235,31 @@ func TestTemplateToHtml(t *testing.T) {
 	err = tmpl.ExecuteTemplate(os.Stdout, "index.html", &data)
 	if err != nil {
 		t.Error(err)
+	}
+}
+
+func TestRender(t *testing.T) {
+	r := MustNewRenderer("./templates")
+
+	h, err := r.Render("index.html", &data)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Logf("%s\n", h)
+}
+
+func TestRenderToFile(t *testing.T) {
+	r := MustNewRenderer("./templates")
+
+	f, err := os.Create("build/index.html")
+	defer f.Close()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = r.RenderTo(f, "index.html", &data)
+	if err != nil {
+		t.Fatal(err)
 	}
 }

@@ -41,6 +41,15 @@ func NewRenderer(dir string) (Renderer, error) {
 	}, nil
 }
 
+func MustNewRenderer(dir string) Renderer {
+	r, err := NewRenderer(dir)
+	if err != nil {
+		panic(err)
+	}
+
+	return r
+}
+
 func (r Renderer) Render(name string, data any) (string, error) {
 	var b bytes.Buffer
 	err := r.tmpl.ExecuteTemplate(&b, name, data)
@@ -51,6 +60,8 @@ func (r Renderer) Render(name string, data any) (string, error) {
 	return b.String(), nil
 }
 
+// RenderTo write outputs to a writer, such as
+// file, network stream, etc.
 func (r Renderer) RenderTo(wr io.Writer, name string, data any) error {
 	return r.tmpl.ExecuteTemplate(wr, name, data)
 }
