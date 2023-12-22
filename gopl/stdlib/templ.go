@@ -26,6 +26,26 @@ func ParseTemplateDir(dir string) (*template.Template, error) {
 	return template.ParseFiles(paths...)
 }
 
+func ParseFSTemplateDir(fsys fs.FS, dir string) (*template.Template, error) {
+	var paths []string
+	err := fs.WalkDir(fsys, dir, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if !d.IsDir() {
+			paths = append(paths, path)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return template.ParseFS(fsys, paths...)
+}
+
 type Renderer struct {
 	tmpl *template.Template
 }
