@@ -34,32 +34,6 @@ func TestTextTempl(t *testing.T) {
 	}
 }
 
-func parseTemplate(t *testing.T, file string) *template.Template {
-	b, err := os.ReadFile(file)
-	if err != nil {
-		t.Error(err)
-	}
-
-	tmpl, err := template.New("test").Parse(string(b))
-	if err != nil {
-		t.Error(err)
-	}
-
-	return tmpl
-}
-
-func renderFile(t *testing.T, file string) {
-	tmpl := parseTemplate(t, file)
-
-	// A template may be executed directly or though
-	// ExecuteTemplate, which executes an associated
-	// template identified by name.
-	err := tmpl.Execute(os.Stdout, nil)
-	if err != nil {
-		t.Error(err)
-	}
-}
-
 const pipelineVar = `
 {{"\"output\""}}
 
@@ -90,7 +64,15 @@ const pipelineVar = `
 `
 
 func TestTmplPipelineVar(t *testing.T) {
-	renderFile(t, "./templates/pipeline_var.tmpl")
+	tmpl, err := template.New("test").Parse(pipelineVar)
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = tmpl.Execute(os.Stdout, nil)
+	if err != nil {
+		t.Error(err)
+	}
 }
 
 const nested = `
@@ -125,7 +107,15 @@ Finally it invokes T3
 `
 
 func TestTmplNested(t *testing.T) {
-	renderFile(t, "./templates/nested.tmpl")
+	tmpl, err := template.New("test").Parse(nested)
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = tmpl.Execute(os.Stdout, nil)
+	if err != nil {
+		t.Error(err)
+	}
 }
 
 type Recipient struct {
@@ -167,10 +157,13 @@ Josie
 `
 
 func TestTmplLetter(t *testing.T) {
-	tmpl := parseTemplate(t, "./templates/letter.tmpl")
+	tmpl, err := template.New("test").Parse(letter)
+	if err != nil {
+		t.Error(err)
+	}
 
 	for _, r := range recipients {
-		err := tmpl.Execute(os.Stdout, r)
+		err = tmpl.Execute(os.Stdout, r)
 		if err != nil {
 			t.Error(err)
 		}
@@ -222,11 +215,26 @@ var data = TemplateData{
 	SITEURL:  "https://siongui.github.io/",
 }
 
-func TestTemplateToHtml(t *testing.T) {
+func TestParseTemplateDir(t *testing.T) {
 
 	tmpl, err := ParseTemplateDir("templates")
 	if err != nil {
 		t.Error(err)
+	}
+
+	t.Logf("%s\n", tmpl.DefinedTemplates())
+	t.Logf("%s\n", tmpl.Name())
+
+	err = tmpl.ExecuteTemplate(os.Stdout, "index.html", &data)
+	if err != nil {
+		t.Error(err)
+	}
+}
+
+func TestParseFSTemplateDir(t *testing.T) {
+	tmpl, err := ParseFSTemplateDir(f, "templates")
+	if err != nil {
+		t.Fatal(err)
 	}
 
 	t.Logf("%s\n", tmpl.DefinedTemplates())
