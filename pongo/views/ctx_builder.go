@@ -1,7 +1,7 @@
 package views
 
 import (
-	"example.com/pongodemo/widget"
+	"example.com/pongodemo/views/widget"
 	"github.com/flosch/pongo2"
 )
 

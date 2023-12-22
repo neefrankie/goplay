@@ -1,6 +1,6 @@
 package views
 
-import "example.com/pongodemo/widget"
+import "example.com/pongodemo/views/widget"
 
 type FooterColumn struct {
 	Title string

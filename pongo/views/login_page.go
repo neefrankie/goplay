@@ -2,7 +2,7 @@ package views
 
 import (
 	"example.com/pongodemo/models"
-	"example.com/pongodemo/widget"
+	"example.com/pongodemo/views/widget"
 )
 
 func NewLoginForm(value models.Login) widget.Form {

@@ -1,17 +1,27 @@
-package main
+package views
 
 import (
+	"embed"
 	"errors"
-	"github.com/FTChinese/go-rest/render"
-	rice "github.com/GeertJohan/go.rice"
-	"github.com/flosch/pongo2"
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
 	"io"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/FTChinese/go-rest/render"
+	"github.com/flosch/pongo2"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 )
+
+//go:embed templates
+var templates embed.FS
+
+type Config struct {
+	Debug   bool
+	Version string
+	Year    int
+}
 
 // Renderer is used to render pong2 templates.
 type Renderer struct {
@@ -36,12 +46,8 @@ func NewRenderer(config Config) (Renderer, error) {
 	}
 
 	log.Info("Production environment using rice template loader")
-	box, err := rice.FindBox("templates")
-	if err != nil {
-		return Renderer{}, err
-	}
-	loader := NewRiceTemplateLoader(box)
-	set := pongo2.NewSet("rice", loader)
+	loader := NewEmbedFSTemplateLoader(templates)
+	set := pongo2.NewSet("embeded", loader)
 	set.Debug = false
 
 	return Renderer{
@@ -87,33 +93,35 @@ func (r Renderer) Render(w io.Writer, name string, data interface{}, c echo.Cont
 		return err
 	}
 
-	config.Year = time.Now().Year()
+	r.config.Year = time.Now().Year()
 	ctx["env"] = r.config
 
 	return t.ExecuteWriter(ctx, w)
 }
 
-// RiceTemplateLoader implements pongo2.TemplateLoader to
-// loads templates from compiled binary
-type RiceTemplateLoader struct {
-	box *rice.Box
+type EmbedFSTemplateLoader struct {
+	f embed.FS
 }
 
-func NewRiceTemplateLoader(box *rice.Box) *RiceTemplateLoader {
-
-	return &RiceTemplateLoader{box: box}
+func NewEmbedFSTemplateLoader(f embed.FS) EmbedFSTemplateLoader {
+	return EmbedFSTemplateLoader{
+		f: f,
+	}
 }
 
-func (loader RiceTemplateLoader) Abs(base, name string) string {
+func (loader EmbedFSTemplateLoader) Abs(base, name string) string {
 	return name
 }
 
-func (loader RiceTemplateLoader) Get(path string) (io.Reader, error) {
-	return loader.box.Open(path)
+// Get a template file. The path is relative to `template`, such as `b2b/home.html`.
+// Since go embed.FS starts from the `template` level,
+// you have to prefix the path with `template/`
+func (loader EmbedFSTemplateLoader) Get(path string) (io.Reader, error) {
+	return loader.f.Open("template/" + path)
 }
 
-// RestfulErrorHandler implements echo's HTTPErrorHandler.
-func errorHandler(err error, c echo.Context) {
+// ErrorHandler implements echo's HTTPErrorHandler.
+func ErrorHandler(err error, c echo.Context) {
 	re, ok := err.(*render.ResponseError)
 	if !ok {
 		re = render.NewInternalError(err.Error())

@@ -4,7 +4,7 @@ use (
 	./algorithms
 	./dbdemo
 	./dump
-	./echopongo
+	./pongo
 	./example
 	./fetch
 	./fiber

@@ -4,6 +4,7 @@ import (
 	"flag"
 
 	"example.com/pongodemo/controllers"
+	"example.com/pongodemo/views"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -13,7 +14,7 @@ import (
 var (
 	isProd bool
 	build  string
-	config Config
+	config views.Config
 )
 
 func init() {
@@ -21,7 +22,7 @@ func init() {
 
 	flag.Parse()
 
-	config = Config{
+	config = views.Config{
 		Debug: !isProd,
 	}
 }
@@ -29,8 +30,8 @@ func init() {
 func main() {
 	e := echo.New()
 
-	e.Renderer = MustNewRenderer(config)
-	e.HTTPErrorHandler = errorHandler
+	e.Renderer = views.MustNewRenderer(config)
+	e.HTTPErrorHandler = views.ErrorHandler
 	if !isProd {
 		e.Static("/css", "client/node_modules/bootstrap/dist/css")
 		e.Static("/js", "client/node_modules/bootstrap.native/dist")
