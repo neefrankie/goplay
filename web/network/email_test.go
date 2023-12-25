@@ -1,7 +1,7 @@
 package network
 
 import (
-	"goplay/web/config"
+	"goplay/config"
 	"testing"
 	"time"
 

@@ -2,11 +2,11 @@ go 1.21.5
 
 use (
 	./algorithms
-	./dbdemo
+	./config
+	./database
 	./dump
 	./example
 	./fetch
-	./fiber
 	./fuzz
 	./gin
 	./gopl
