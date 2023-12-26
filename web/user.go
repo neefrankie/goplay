@@ -1,4 +1,4 @@
-package pkg
+package web
 
 import (
 	"github.com/go-playground/validator/v10"
