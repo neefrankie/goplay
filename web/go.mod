@@ -3,6 +3,8 @@ module goplay/web
 go 1.21.5
 
 require (
+	github.com/a-h/templ v0.2.501 // indirect
+	github.com/brianvoe/gofakeit/v6 v6.26.3 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 	github.com/go-mail/mail v2.3.1+incompatible // indirect
 	github.com/go-playground/locales v0.14.1 // indirect

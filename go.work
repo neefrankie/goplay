@@ -7,7 +7,6 @@ use (
 	./dump
 	./example
 	./fetch
-	./fuzz
 	./gin
 	./gopl
 	./hello
