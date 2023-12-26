@@ -1,3 +1,3 @@
-module example.com/fetch
+module goplay/fetch
 
 go 1.20
