@@ -1,19 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
-	"example.com/fetch"
 	"github.com/fsnotify/fsnotify"
-	"golang.org/x/example/stringutil"
 )
 
 func main() {
-	fmt.Println(stringutil.ToUpper("Hello"))
-
-	fetch.New()
-
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Fatal(err)
