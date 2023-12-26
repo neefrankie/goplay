@@ -49,7 +49,7 @@ type User struct {
 // * `gorm:"defualt:xxx"`
 // * `gorm:"precision"`
 // * `gorm:"scale"`
-// * `gorm:"not null"`
+// * `gorm:"notNull"`
 // * `gorm:"autoIncrement"`
 // * `gorm:"autoIncrementIncrement"`
 // * `gorm:"embedded"`
@@ -64,17 +64,42 @@ type User struct {
 // * `gorm:"-,-:migration,-:all"`
 // * `gorm:"comment"`
 
+// Association Tags
+// * `gorm:"foreignKey"` The column name of the current model
+//    used as a foreign key in the join table
+// * `gorm:"references"` The column name of the reference
+//    table that the foreign key of the join table maps to.
+// * `gorm:"polypmorphic"`
+// * `gorm:"polymorphicValue"`
+// * `gorm:"many2many"`
+// * `gorm:"joinForeignKey"`
+// * `gorm:"joinReferences"`
+// * `gorm:"constraint"`
+
+// CREATE TABLE credit_cards (
+//
+//		id          bigint unsigned AUTO_INCREMENT,
+//		created_at  datetime(3) NULL,
+//	 updated_at  datetime(3) NULL,
+//	 deleted_at  datetime(3) NULL,
+//	 number      longtext,
+//	 customer_id bigint unsigned
+//	 PRIMAEY KEY (id)
+//	 INDEx       idx_credeit_cards_deleted_at (deleted_at)
+//	 CONSTRAINT  fk_credit_cards_customer FOREIGN KEY (customer_id) REFERENCES customers (id)
+//
+// );
 type CreditCard struct {
 	gorm.Model
-	Number string
-	UserID uint
+	Number     string
+	CustomerID uint
+	Customer   Customer `gorm:"foreignKey:CustomerID"`
 }
 
 // The example in the tutorial does not work.
 type Customer struct {
 	gorm.Model
-	Name       string
-	CreditCard CreditCard
+	Name string
 }
 
 type Language struct {
