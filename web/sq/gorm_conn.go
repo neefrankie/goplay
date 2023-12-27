@@ -11,7 +11,7 @@ import (
 func NewMySQL(c config.Conn) (*gorm.DB, error) {
 
 	return gorm.Open(mysql.New(mysql.Config{
-		DSNConfig: buildDSN(c, "gormdb"),
+		DSNConfig: config.BuildDSN(c, "gormdb"),
 	}), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
