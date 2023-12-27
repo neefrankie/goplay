@@ -8,72 +8,6 @@ import (
 	"gorm.io/gorm"
 )
 
-func TestCreateOne(t *testing.T) {
-	db := getMyDB()
-	db.AutoMigrate(&User{})
-
-	user := User{
-		Name:     "Jinzhu",
-		Age:      18,
-		Birthday: time.Now(),
-	}
-
-	result := db.Create(&user)
-
-	if result.Error != nil {
-		t.Fatal(result.Error)
-	}
-
-	t.Logf("Created user %d", user.ID)
-	t.Logf("Rows affected: %d", result.RowsAffected)
-}
-
-func TestCreateMulti(t *testing.T) {
-	db := getMyDB()
-
-	users := []*User{
-		{
-			Name:     "Jinzhu",
-			Age:      18,
-			Birthday: time.Now(),
-		},
-		{
-			Name:     "Jackson",
-			Age:      19,
-			Birthday: time.Now(),
-		},
-	}
-
-	result := db.Create(users)
-
-	if result.Error != nil {
-		t.Fatal(result.Error)
-	}
-
-	t.Logf("Inserted %d rows\n", result.RowsAffected)
-}
-
-// When creating from map, primary key values won't be back filled.
-func TestCreateMap(t *testing.T) {
-	db := getMyDB()
-
-	db.Model(&User{}).Create(map[string]interface{}{
-		"Name": "jinzhu",
-		"Age":  18,
-	})
-
-	db.Model(&User{}).Create([]map[string]interface{}{
-		{
-			"Name": "jinzhu_1",
-			"Age":  18,
-		},
-		{
-			"Name": "jinzhu_2",
-			"Age":  20,
-		},
-	})
-}
-
 // To retrieve a singl row, use First, Take, Last.
 // Return ErrRecordNotFound upon missing row.
 // First and Last searchs by primary key.
@@ -115,6 +49,10 @@ func TestGetFirstRow(t *testing.T) {
 
 	var u4 User
 	// SELECT * FROM users WHERE id = 2
+	// Only works for int id.
+	// If the second param cannot be coverted to a string,
+	// it is treated as a column in WHERE.
+	// For UUID, don't use this approach.
 	result = db.First(&u4, "2")
 	if result.Error != nil {
 		t.Fatal(result.Error)
@@ -241,8 +179,8 @@ func TestStringCond(t *testing.T) {
 
 	// If dest have primary key set, condition will not override it.
 	// Instead they will be AND:
-	var user = User{ID: 10}
-	db.Where("id = ?", 20).First(&user)
+	// var user = User{ID: 10}
+	// db.Where("id = ?", 20).First(&user)
 	// SELECT * FROM users WHERE id = 10 AND id = 20 ORDER BY id ASC LIMIT 1
 }
 

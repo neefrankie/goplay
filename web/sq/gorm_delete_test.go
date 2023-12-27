@@ -8,7 +8,7 @@ func TestDeleteRecord(t *testing.T) {
 	db := getMyDB()
 
 	user := User{
-		ID: 111,
+		// ID: 111,
 	}
 
 	db.Delete(&user)
@@ -44,9 +44,9 @@ func TestBatchDelete(t *testing.T) {
 
 	// To efficiently delete large number of records:
 	var users = []User{
-		{ID: 1},
-		{ID: 2},
-		{ID: 3},
+		// {ID: 1},
+		// {ID: 2},
+		// {ID: 3},
 	}
 	db.Delete(&users)
 	// DELETE FROM users WHERE id IN (1,2,3);
@@ -55,11 +55,12 @@ func TestBatchDelete(t *testing.T) {
 	// DELETE FROM users WHERE name LIKE "%jinzhu%" AND id IN (1, 2, 3)
 }
 
+// Soft delete only works with gorm.DeletedAt field.
 func TestSoftDelete(t *testing.T) {
 	db := getMyDB()
 
 	user := User{
-		ID: 111,
+		// ID: 111,
 	}
 
 	db.Delete(&user)

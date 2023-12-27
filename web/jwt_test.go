@@ -1,7 +1,7 @@
 package web
 
 import (
-	"goplay/config"
+	"goplay/web/config"
 	"testing"
 
 	"github.com/golang-jwt/jwt"

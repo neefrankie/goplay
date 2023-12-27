@@ -8,7 +8,7 @@ package sq
 import (
 	"database/sql"
 	"fmt"
-	"goplay/config"
+	"goplay/web/config"
 	"log"
 	"time"
 

@@ -2,10 +2,7 @@ go 1.21.5
 
 use (
 	./algorithms
-	./config
-	./database
 	./dump
-	./fetch
 	./gin
 	./gopl
 	./hello

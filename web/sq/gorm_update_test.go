@@ -36,7 +36,7 @@ func TestUpdateSingleCol(t *testing.T) {
 	// WHERE active=true
 
 	user := User{
-		ID: 111,
+		// ID: 111,
 	}
 	db.Model(&user).Update("name", "hello")
 	// UPATE users
@@ -56,7 +56,7 @@ func TestUpdateMultiCols(t *testing.T) {
 	db := getMyDB()
 
 	user := User{
-		ID: 111,
+		// ID: 111,
 	}
 	db.Model(&user).Updates(User{
 		Name: "hello",
@@ -82,7 +82,7 @@ func TestUpdateSelectedFields(t *testing.T) {
 	db := getMyDB()
 
 	user := User{
-		ID: 111,
+		// ID: 111,
 	}
 
 	db.Model(&user).Select("name").Updates(map[string]interface{}{

@@ -1,10 +1,9 @@
 package sq
 
 import (
-	"goplay/config"
+	"goplay/web/config"
 
 	"gorm.io/driver/mysql"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
@@ -26,17 +25,4 @@ func MustNewMySQL(c config.Conn) *gorm.DB {
 	}
 
 	return myDB
-}
-
-func ConnectSQLite() (*gorm.DB, error) {
-	return gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
-}
-
-func MustConnectSQLite() *gorm.DB {
-	db, err := ConnectSQLite()
-	if err != nil {
-		panic(err)
-	}
-
-	return db
 }

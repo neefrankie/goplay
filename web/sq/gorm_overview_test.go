@@ -1,7 +1,7 @@
 package sq
 
 import (
-	"goplay/config"
+	"goplay/web/config"
 	"testing"
 
 	"gorm.io/gorm"

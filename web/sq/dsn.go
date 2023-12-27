@@ -2,7 +2,7 @@ package sq
 
 import (
 	"fmt"
-	"goplay/config"
+	"goplay/web/config"
 	"time"
 
 	driver "github.com/go-sql-driver/mysql"
