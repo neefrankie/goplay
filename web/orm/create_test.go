@@ -1,4 +1,4 @@
-package sq
+package orm
 
 import (
 	"goplay/web/chrono"
