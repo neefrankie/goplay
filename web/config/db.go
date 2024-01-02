@@ -91,3 +91,19 @@ func MustOpenMyDB(dbName string) *sql.DB {
 
 	return db
 }
+
+func createTableStmt(name string) string {
+	return fmt.Sprintf(`CREATE DATABASE IF NOT EXISTS %s
+	CHARACTER SET utf8mb4 
+	COLLATE utf8mb4_unicode_ci;`, name)
+}
+
+func CreateTable(db *sql.DB, dbName string) (string, error) {
+	stmt := createTableStmt(dbName)
+	_, err := db.Exec(stmt)
+	if err != nil {
+		return "", err
+	}
+
+	return stmt, nil
+}

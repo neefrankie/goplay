@@ -13,22 +13,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func createTableStmt(name string) string {
-	return fmt.Sprintf(`CREATE DATABASE IF NOT EXISTS %s
-	CHARACTER SET utf8mb4 
-	COLLATE utf8mb4_unicode_ci;`, name)
-}
-
-func CreateTable(db *sql.DB, dbName string) (string, error) {
-	stmt := createTableStmt(dbName)
-	_, err := db.Exec(stmt)
-	if err != nil {
-		return "", err
-	}
-
-	return stmt, nil
-}
-
 // We're loading the driver anonymously, aliasing its
 // package qualifier to _ so none of its exported names are
 // visible to our code.
