@@ -10,7 +10,7 @@ import (
 func TestCreateEntDB(t *testing.T) {
 	db := config.MustOpenMyDB("")
 
-	stmt, err := config.CreateTable(db, "entdemo")
+	stmt, err := config.CreateDB(db, "entdemo")
 	if err != nil {
 		t.Fatal(err)
 	}

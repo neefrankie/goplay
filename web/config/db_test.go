@@ -11,7 +11,7 @@ func TestCreateDB(t *testing.T) {
 	db := MustOpenMyDB("")
 
 	for _, name := range names {
-		stmt, err := CreateTable(db, name)
+		stmt, err := CreateDB(db, name)
 		if err != nil {
 			t.Fatal(err)
 		}
