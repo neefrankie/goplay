@@ -1,6 +1,10 @@
 package stdlib
 
 import (
+	"bytes"
+	"encoding/base64"
+	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 	"strings"
@@ -40,4 +44,52 @@ func TestIOWriteString(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+}
+
+func TestStringsJSON(t *testing.T) {
+	var b strings.Builder
+
+	enc := json.NewEncoder(&b)
+	enc.SetIndent("", "\t")
+	err := enc.Encode(map[string]string{
+		"hello": "world",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Logf("%s", b.String())
+}
+
+func TestBufferJSON(t *testing.T) {
+	buf := new(bytes.Buffer)
+	enc := json.NewEncoder(buf)
+	enc.SetIndent("", "\t")
+
+	err := enc.Encode(map[string]string{
+		"hello": "world",
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Logf("%s", buf.String())
+}
+
+// A BUffer is a variable-sized buffer bytes with Read and Write methods.
+// The zero value for Buffer is an empty buffer ready to use.
+func TestBufferWriter(t *testing.T) {
+	var b bytes.Buffer
+
+	b.Write([]byte("Hello "))
+	fmt.Fprint(&b, "world!")
+
+	b.WriteTo(os.Stdout)
+}
+
+func TestBufferReader(t *testing.T) {
+	buf := bytes.NewBufferString("R29waGVycyBydWxlIQ==")
+	dec := base64.NewDecoder(base64.StdEncoding, buf)
+	io.Copy(os.Stdout, dec)
 }
