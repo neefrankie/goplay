@@ -107,3 +107,25 @@ func CreateDB(db *sql.DB, dbName string) (string, error) {
 
 	return stmt, nil
 }
+
+func DropDB(db *sql.DB, dbName string) (string, error) {
+	stmt := fmt.Sprintf("DROP DATABASE IF EXISTS %s;", dbName)
+
+	_, err := db.Exec(stmt)
+	if err != nil {
+		return "", err
+	}
+
+	return stmt, nil
+}
+
+func TruncateTable(db *sql.DB, tbl string) (string, error) {
+	stmt := fmt.Sprintf("TRUNCATE TABLE %s;", tbl)
+
+	_, err := db.Exec(stmt)
+	if err != nil {
+		return "", err
+	}
+
+	return stmt, nil
+}
