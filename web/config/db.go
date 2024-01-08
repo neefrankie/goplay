@@ -55,7 +55,7 @@ func MustGetMyDSN(dbName string) string {
 // THe first actual connection to the underlying datastore
 // will be established lazily, when it's needed for the
 // first time.
-func OpenMyDB(c Conn, dbName string) (*sql.DB, error) {
+func OpenMySQL(c Conn, dbName string) (*sql.DB, error) {
 
 	db, err := sql.Open("mysql", BuildDSN(c, dbName).FormatDSN())
 	if err != nil {
@@ -83,8 +83,8 @@ func OpenMyDB(c Conn, dbName string) (*sql.DB, error) {
 	return db, nil
 }
 
-func MustOpenMyDB(dbName string) *sql.DB {
-	db, err := OpenMyDB(MustLoad().GetMySQLConn(), dbName)
+func MustOpenMySQL(conn Conn, dbName string) *sql.DB {
+	db, err := OpenMySQL(conn, dbName)
 	if err != nil {
 		panic(err)
 	}
@@ -92,15 +92,33 @@ func MustOpenMyDB(dbName string) *sql.DB {
 	return db
 }
 
-func createDBStmt(name string) string {
-	return fmt.Sprintf(`CREATE DATABASE IF NOT EXISTS %s
-	CHARACTER SET utf8mb4 
+type Creator struct {
+	db *sql.DB
+}
+
+func NewCreator(conn Conn) (Creator, error) {
+	db, err := OpenMySQL(conn, "")
+	if err != nil {
+		return Creator{}, err
+	}
+
+	return Creator{
+		db: db,
+	}, nil
+}
+
+func MustNewCreator(conn Conn) Creator {
+	return Creator{
+		db: MustOpenMySQL(conn, ""),
+	}
+}
+
+func (c Creator) CreateDB(name string) (string, error) {
+	stmt := fmt.Sprintf(`CREATE DATABASE IF NOT EXISTS %s
+	CHARACTER SET utf8mb4
 	COLLATE utf8mb4_unicode_ci;`, name)
-}
 
-func CreateDB(db *sql.DB, dbName string) (string, error) {
-	stmt := createDBStmt(dbName)
-	_, err := db.Exec(stmt)
+	_, err := c.db.Exec(stmt)
 	if err != nil {
 		return "", err
 	}
@@ -108,10 +126,10 @@ func CreateDB(db *sql.DB, dbName string) (string, error) {
 	return stmt, nil
 }
 
-func DropDB(db *sql.DB, dbName string) (string, error) {
-	stmt := fmt.Sprintf("DROP DATABASE IF EXISTS %s;", dbName)
+func (c Creator) DropDB(name string) (string, error) {
+	stmt := fmt.Sprintf("DROP DATABASE IF EXISTS %s;", name)
 
-	_, err := db.Exec(stmt)
+	_, err := c.db.Exec(stmt)
 	if err != nil {
 		return "", err
 	}
@@ -119,10 +137,10 @@ func DropDB(db *sql.DB, dbName string) (string, error) {
 	return stmt, nil
 }
 
-func TruncateTable(db *sql.DB, tbl string) (string, error) {
+func (c Creator) TruncateTable(tbl string) (string, error) {
 	stmt := fmt.Sprintf("TRUNCATE TABLE %s;", tbl)
 
-	_, err := db.Exec(stmt)
+	_, err := c.db.Exec(stmt)
 	if err != nil {
 		return "", err
 	}

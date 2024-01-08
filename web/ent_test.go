@@ -7,16 +7,6 @@ import (
 	"testing"
 )
 
-func TestCreateEntDB(t *testing.T) {
-	db := config.MustOpenMyDB("")
-
-	stmt, err := config.CreateDB(db, "entdemo")
-	if err != nil {
-		t.Fatal(err)
-	}
-	t.Logf("%s\n", stmt)
-}
-
 func TestEnt(t *testing.T) {
 
 	client, err := ent.Open("mysql", config.MustGetMyDSN("entdemo"))

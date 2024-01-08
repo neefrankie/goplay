@@ -2,16 +2,16 @@ package config
 
 import "testing"
 
-func TestCreateDB(t *testing.T) {
+func TestCreator_CreateDB(t *testing.T) {
 	names := []string{
 		"gormdb",
 		"entdemo",
 	}
 
-	db := MustOpenMyDB("")
+	c := MustNewCreator(MustLoad().GetMySQLConn())
 
 	for _, name := range names {
-		stmt, err := CreateDB(db, name)
+		stmt, err := c.CreateDB(name)
 		if err != nil {
 			t.Fatal(err)
 		}
