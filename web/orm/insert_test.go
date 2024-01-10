@@ -1,12 +1,13 @@
 package orm
 
 import (
+	"goplay/web/model"
 	"testing"
 )
 
 func TestCreateOne(t *testing.T) {
 	db := getMyDB()
-	db.AutoMigrate(&User{})
+	db.AutoMigrate(&model.User{})
 
 	user := NewUser()
 
@@ -23,7 +24,7 @@ func TestCreateOne(t *testing.T) {
 func TestCreateMulti(t *testing.T) {
 	db := getMyDB()
 
-	users := []*User{
+	users := []*model.User{
 		NewUserP(),
 		NewUserP(),
 	}
@@ -41,9 +42,9 @@ func TestCreateMulti(t *testing.T) {
 func TestCreateMap(t *testing.T) {
 	db := getMyDB()
 
-	db.Model(&User{}).Create(NewUserM())
+	db.Model(&model.User{}).Create(NewUserM())
 
-	db.Model(&User{}).Create([]map[string]interface{}{
+	db.Model(&model.User{}).Create([]map[string]interface{}{
 		NewUserM(),
 		NewUserM(),
 	})

@@ -1,13 +1,16 @@
 package orm
 
-import "testing"
+import (
+	"goplay/web/model"
+	"testing"
+)
 
 // When deleting a record, the deleted value should have
 // primary key or a Batch Delete will be triggered.
 func TestDeleteRecord(t *testing.T) {
 	db := getMyDB()
 
-	user := User{
+	user := model.User{
 		// ID: 111,
 	}
 
@@ -22,11 +25,11 @@ func TestDeleteRecord(t *testing.T) {
 func TestDeleteWithPrimaryKey(t *testing.T) {
 	db := getMyDB()
 
-	db.Delete(&User{}, 10)
+	db.Delete(&model.User{}, 10)
 	// DELETE FROM users
 	// WHERE id=10
 
-	db.Delete(&User{}, "10")
+	db.Delete(&model.User{}, "10")
 	// DELETE FROM users
 	// WHERE id=10
 }
@@ -34,16 +37,16 @@ func TestDeleteWithPrimaryKey(t *testing.T) {
 func TestBatchDelete(t *testing.T) {
 	db := getMyDB()
 
-	db.Where("name LIKE ?", "%jinzhu%").Delete(&User{})
+	db.Where("name LIKE ?", "%jinzhu%").Delete(&model.User{})
 	// DELETE FROM emails
 	// WHERE email LIKE "%jinzhu%"
 
-	db.Delete(&User{}, "email LIKE ?", "%jinzhu%")
+	db.Delete(&model.User{}, "email LIKE ?", "%jinzhu%")
 	// DELETE FROM emails
 	// WHERE email LIKE "%jinzhu%"
 
 	// To efficiently delete large number of records:
-	var users = []User{
+	var users = []model.User{
 		// {ID: 1},
 		// {ID: 2},
 		// {ID: 3},
@@ -59,7 +62,7 @@ func TestBatchDelete(t *testing.T) {
 func TestSoftDelete(t *testing.T) {
 	db := getMyDB()
 
-	user := User{
+	user := model.User{
 		// ID: 111,
 	}
 

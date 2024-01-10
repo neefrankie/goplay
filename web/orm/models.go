@@ -1,8 +1,8 @@
 package orm
 
 import (
-	"database/sql"
 	"goplay/web/chrono"
+	"goplay/web/model"
 	"time"
 
 	"github.com/brianvoe/gofakeit/v6"
@@ -20,32 +20,16 @@ type Product struct {
 	Price      uint
 }
 
-// Define Models
-// By default, GORM uses:
-// * `ID` field as primary key,
-// * snake form of plural struct name as table name,
-// * CreatedAt, UpdatedAt to track creation, update time.
-
-type User struct {
-	gorm.Model
-	Name         string         `json:"name" gorm:"type:VARCHAR(64)"`
-	Email        string         `json:"email" gorm:"type:VARCHAR(64);uniqueIndex"`
-	Age          uint           `json:"age"`
-	Birthday     chrono.Date    `json:"birthday" gorm:"type:DATE"`
-	MemberNumber sql.NullString `json:"memberNumber" gorm:"type:VARCHAR(36)"`
-	ActivateAt   sql.NullTime   `json:"activateAt" gorm:"type:DATETIME(0)"`
-}
-
-func NewUser() User {
-	return User{
+func NewUser() model.User {
+	return model.User{
 		Name:     gofakeit.Name(),
 		Email:    gofakeit.Email(),
-		Age:      uint(gofakeit.Number(1, 130)),
+		Age:      uint8(gofakeit.Number(1, 130)),
 		Birthday: chrono.DateNow(),
 	}
 }
 
-func NewUserP() *User {
+func NewUserP() *model.User {
 	u := NewUser()
 	return &u
 }

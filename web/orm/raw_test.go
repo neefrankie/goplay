@@ -1,6 +1,7 @@
 package orm
 
 import (
+	"goplay/web/model"
 	"testing"
 	"time"
 
@@ -8,7 +9,7 @@ import (
 )
 
 func TestRawSQL(t *testing.T) {
-	var u1 User
+	var u1 model.User
 
 	db := getMyDB()
 	db.Raw("SELECT id, name, age FROM users WHERE id = ?", 3).Scan(&u1)

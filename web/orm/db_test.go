@@ -1,9 +1,12 @@
 package orm
 
-import "testing"
+import (
+	"goplay/web/model"
+	"testing"
+)
 
 func TestMigrate(t *testing.T) {
 	db := getMyDB()
 
-	db.AutoMigrate(&User{})
+	db.AutoMigrate(&model.User{})
 }

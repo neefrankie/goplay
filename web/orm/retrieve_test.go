@@ -2,6 +2,7 @@ package orm
 
 import (
 	"encoding/json"
+	"goplay/web/model"
 	"testing"
 	"time"
 
@@ -17,7 +18,7 @@ import (
 func TestGetFirstRow(t *testing.T) {
 	db := getMyDB()
 	// First record by primary key ascending.
-	var u1 User
+	var u1 model.User
 	result := db.First(&u1)
 	// SELECT *
 	// FROM users
@@ -30,7 +31,7 @@ func TestGetFirstRow(t *testing.T) {
 
 	var u2 = map[string]interface{}{}
 	// SELECT * FROM users ORDER BY users.id LIMIT 1
-	result = db.Model(&User{}).First(&u2)
+	result = db.Model(&model.User{}).First(&u2)
 	if result.Error != nil {
 		t.Fatal(result.Error)
 	}
@@ -39,7 +40,7 @@ func TestGetFirstRow(t *testing.T) {
 	// Not working
 	// db.Table("users").First(&user)
 
-	var u3 User
+	var u3 model.User
 	// SELECT * FROM users WHERE id = 10
 	result = db.First(&u3, 2)
 	if result.Error != nil {
@@ -47,7 +48,7 @@ func TestGetFirstRow(t *testing.T) {
 	}
 	t.Logf("User 2: %v", u3)
 
-	var u4 User
+	var u4 model.User
 	// SELECT * FROM users WHERE id = 2
 	// Only works for int id.
 	// If the second param cannot be coverted to a string,
@@ -83,7 +84,7 @@ func TestGetLastRow(t *testing.T) {
 
 	// Last record by primary key descending.
 	// If you reuse u1, it seems not retrieving the correct data.
-	var u1 User
+	var u1 model.User
 	result := db.Last(&u1)
 	if result.Error != nil {
 		t.Fatal(result.Error)
@@ -95,12 +96,12 @@ func TestTakeAnyRow(t *testing.T) {
 	db := getMyDB()
 
 	// Get a row, no order.
-	var u1 User
+	var u1 model.User
 	result := db.Take(&u1)
 	if result.Error != nil {
 		t.Fatal(result.Error)
 	}
-	t.Logf("Any one of user: %v\n", u1)
+	t.Logf("Any one of model.User: %v\n", u1)
 
 	var u2 = map[string]interface{}{}
 	result = db.Table("users").Take(&u2)
@@ -113,7 +114,7 @@ func TestTakeAnyRow(t *testing.T) {
 func TestFind(t *testing.T) {
 	db := getMyDB()
 
-	var u123 []User
+	var u123 []model.User
 	// SELECT * FROM users WHERE id IN (1, 2, 3)
 	result := db.Find(&u123, []int{1, 2, 3})
 	if result.Error != nil {
@@ -127,8 +128,8 @@ func TestFind(t *testing.T) {
 func TestSepcifyFields(t *testing.T) {
 	db := getMyDB()
 
-	var users []User
-	db.Select("name", "age").Find(&users)
+	var users []model.User
+	db.Select("name", "age").Find(&model.User{})
 	// SELECT name, age
 	// FROm users;
 
@@ -141,7 +142,7 @@ func TestStringCond(t *testing.T) {
 	db := getMyDB()
 
 	// Get first matched record
-	var u1 User
+	var u1 model.User
 	// SELECT * FROM users WHERE name = 'jinzhu' ORDER BY id LIMIT 1
 	result := db.Where("name = ?", "jinzhu").First(&u1)
 	if result.Error != nil {
@@ -150,7 +151,7 @@ func TestStringCond(t *testing.T) {
 	t.Logf("%v\n", u1)
 
 	// Get all matched records
-	var users []User
+	var users []model.User
 	// SELECT * FROM users WHERE name <> 'jinzhu'
 	result = db.Where("name <> ?", "jinzhu").Find(&users)
 	if result.Error != nil {
@@ -188,8 +189,8 @@ func TestStructMapCond(t *testing.T) {
 	db := getMyDB()
 
 	// Struct
-	var u1 User
-	db.Where(&User{Name: "jinzhu", Age: 28}).First(&u1)
+	var u1 model.User
+	db.Where(&model.User{Name: "jinzhu", Age: 28}).First(&u1)
 	// SELECT *
 	// FROM users
 	// WHERE name = "jinzhu" AND age = 20
@@ -197,7 +198,7 @@ func TestStructMapCond(t *testing.T) {
 	// LIMIT 1
 
 	// Map
-	var users []User
+	var users []model.User
 	db.Where(map[string]interface{}{
 		"name": "jinzhu",
 		"age":  20,
@@ -215,7 +216,7 @@ func TestStructMapCond(t *testing.T) {
 	// When querying with struct, GORM will only query with non-zero fields.
 	// Field's value with 0, '', false or other zero values wont't be used
 	// to build query conditions.
-	db.Where(&User{
+	db.Where(&model.User{
 		Name: "jinzhu",
 		Age:  0,
 	}).Find(&users)
@@ -235,12 +236,12 @@ func TestStructMapCond(t *testing.T) {
 	// When searching with struct, you can specify which particular values
 	// from the struct to use in the query conditions by passing in the
 	// relevant field name or the dbname:
-	db.Where(&User{Name: "jinzhu"}, "name", "Age").Find(&users)
+	db.Where(&model.User{Name: "jinzhu"}, "name", "Age").Find(&users)
 	// SELECT *
 	// FROM users
 	// WHERE name = "jinzhu" AND age = 0;
 
-	db.Where(&User{
+	db.Where(&model.User{
 		Name: "jinzhu",
 	}, "Age").Find(&users)
 	// SELECT *
@@ -253,13 +254,13 @@ func TestStructMapCond(t *testing.T) {
 func TestInelineCond(t *testing.T) {
 	db := getMyDB()
 
-	var user User
+	var user model.User
 	db.First(&user, "id = ?", "string_primary_key")
 	// SELECT *
 	// FROM users
 	// WHERE id = 'string_primary_key';
 
-	var users []User
+	var users []model.User
 	db.Find(&users, "name = ?", "jinzhu")
 	// SELECT *
 	// FROM users
@@ -270,7 +271,7 @@ func TestInelineCond(t *testing.T) {
 	// FROM users
 	// WHERE name <> "jinzhu" AND age > 20
 
-	db.Find(&users, User{Age: 20})
+	db.Find(&users, model.User{Age: 20})
 	// SELECT *
 	// FROM users
 	// WHERE age = 20;
@@ -284,7 +285,7 @@ func TestInelineCond(t *testing.T) {
 func TestNotCond(t *testing.T) {
 	db := getMyDB()
 
-	var user User
+	var user model.User
 	db.Not("name = ?", "jinzhu").First(&user)
 	// SELECT *
 	// FROM users
@@ -292,12 +293,12 @@ func TestNotCond(t *testing.T) {
 	// ORDER BY id
 	// LIMIT 1;
 
-	var users []User
+	var users []model.User
 	db.Not(map[string]interface{}{
 		"name": []string{"jinzhu", "jinzhu 2"},
 	}).Find(&users)
 
-	db.Not(User{Name: "jinzhu", Age: 18}).First(&user)
+	db.Not(model.User{Name: "jinzhu", Age: 18}).First(&user)
 	// SELECT *
 	// FROm users
 	// WHERE name <> "jinzhu" AND age <> 18
@@ -310,13 +311,13 @@ func TestNotCond(t *testing.T) {
 func TestOrCond(t *testing.T) {
 	db := getMyDB()
 
-	var users []User
+	var users []model.User
 	db.Where("role = ?", "admin").Or("role = ?", "super_admin").Find(&users)
 	// SELECT *
 	// FROm users
 	// WHERE role = 'admin' OR role = 'super_admin';
 
-	db.Where("name = 'jinzhu'").Or(User{Name: "jinzhu 2", Age: 18}).Find(&users)
+	db.Where("name = 'jinzhu'").Or(model.User{Name: "jinzhu 2", Age: 18}).Find(&users)
 
 	db.Where("name = 'jinzhu'").Or(map[string]interface{}{"name": "jinzhu 2", "age": 18}).Find(&users)
 }
@@ -324,7 +325,7 @@ func TestOrCond(t *testing.T) {
 func TestOrderBy(t *testing.T) {
 	db := getMyDB()
 
-	var users []User
+	var users []model.User
 	db.Order("age desc, name").Find(&users)
 	// SELECT *
 	// FROM users
@@ -339,7 +340,7 @@ func TestOrderBy(t *testing.T) {
 func TestLimitOffset(t *testing.T) {
 	db := getMyDB()
 
-	var users []User
+	var users []model.User
 	db.Limit(3).Find(&users)
 	// SELECT *
 	// FROM users
@@ -362,7 +363,7 @@ func TestLimitOffset(t *testing.T) {
 func TestDistinct(t *testing.T) {
 	db := getMyDB()
 
-	var results []User
+	var results []model.User
 	db.Distinct("name", "age").Order("name, age desc").Find(&results)
 }
 
@@ -374,8 +375,8 @@ func TestJoins(t *testing.T) {
 		Email string
 	}
 
-	db.Model(&User{}).
-		Select("user.name, emails.email").
+	db.Model(&model.User{}).
+		Select("model.User.name, emails.email").
 		Joins("left join emails on emails.user_id = users.id").
 		Scan(&result{})
 }

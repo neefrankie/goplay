@@ -1,6 +1,7 @@
 package orm
 
 import (
+	"goplay/web/model"
 	"testing"
 
 	"gorm.io/gorm"
@@ -9,7 +10,7 @@ import (
 func TestSaveAllFields(t *testing.T) {
 	db := getMyDB()
 
-	var user User
+	var user model.User
 	db.First(&user)
 
 	user.Name = "jinzhu 2"
@@ -30,12 +31,12 @@ func TestUpdateSingleCol(t *testing.T) {
 	// are required, otherwise ErrMissingWhereClause will be raised.
 	// When using the Model method and its value has a primary
 	// value, the primary key will be used to build the condition:
-	db.Model(&User{}).Where("active = ?", true).Update("name", "hello")
+	db.Model(&model.User{}).Where("active = ?", true).Update("name", "hello")
 	// UPDATE users
 	// SET name = 'hello', updated_at='xxxxx'
 	// WHERE active=true
 
-	user := User{
+	user := model.User{
 		// ID: 111,
 	}
 	db.Model(&user).Update("name", "hello")
@@ -55,10 +56,10 @@ func TestUpdateSingleCol(t *testing.T) {
 func TestUpdateMultiCols(t *testing.T) {
 	db := getMyDB()
 
-	user := User{
+	user := model.User{
 		// ID: 111,
 	}
-	db.Model(&user).Updates(User{
+	db.Model(&user).Updates(model.User{
 		Name: "hello",
 		Age:  18,
 	})
@@ -81,7 +82,7 @@ func TestUpdateMultiCols(t *testing.T) {
 func TestUpdateSelectedFields(t *testing.T) {
 	db := getMyDB()
 
-	user := User{
+	user := model.User{
 		// ID: 111,
 	}
 
@@ -103,7 +104,7 @@ func TestUpdateSelectedFields(t *testing.T) {
 	// SET age=18, active=false, updated_at='xxxx'
 	// WHERE id=111;
 
-	db.Model(&user).Select("Name", "Age").Updates(User{
+	db.Model(&user).Select("Name", "Age").Updates(model.User{
 		Name: "new_name",
 		Age:  0,
 	})
@@ -112,13 +113,13 @@ func TestUpdateSelectedFields(t *testing.T) {
 	// WHERE id=111;
 
 	// Select all fields, including zero fields.
-	db.Model(&user).Select("*").Updates(User{
+	db.Model(&user).Select("*").Updates(model.User{
 		Name: "jinzhu",
 		Age:  0,
 	})
 
 	// Select all fields but omit Role
-	db.Model(&user).Select("*").Omit("Role").Updates(User{
+	db.Model(&user).Select("*").Omit("Role").Updates(model.User{
 		Name: "jinzhu",
 		Age:  0,
 	})
@@ -129,7 +130,7 @@ func TestUpdateSelectedFields(t *testing.T) {
 func TestBatchUpdates(t *testing.T) {
 	db := getMyDB()
 
-	db.Model(User{}).Where("role = ?", "admin").Updates(User{
+	db.Model(model.User{}).Where("role = ?", "admin").Updates(model.User{
 		Name: "hello",
 		Age:  18,
 	})
@@ -146,7 +147,7 @@ func TestBatchUpdates(t *testing.T) {
 func TestUpdateResult(t *testing.T) {
 	db := getMyDB()
 
-	result := db.Model(User{}).Where("role=?", "admin").Updates(User{
+	result := db.Model(model.User{}).Where("role=?", "admin").Updates(model.User{
 		Name: "hello",
 		Age:  18,
 	})
