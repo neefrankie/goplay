@@ -2,14 +2,14 @@ package web
 
 import (
 	"context"
-	"goplay/web/config"
+	"goplay/web/db"
 	"goplay/web/ent"
 	"testing"
 )
 
 func TestEnt(t *testing.T) {
 
-	client, err := ent.Open("mysql", config.MustGetMyDSN("entdemo"))
+	client, err := ent.Open("mysql", db.MustGetMyDSN("entdemo"))
 
 	if err != nil {
 		t.Fatal(err)
