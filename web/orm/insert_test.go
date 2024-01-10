@@ -1,7 +1,6 @@
 package orm
 
 import (
-	"goplay/web/chrono"
 	"testing"
 )
 
@@ -9,11 +8,7 @@ func TestCreateOne(t *testing.T) {
 	db := getMyDB()
 	db.AutoMigrate(&User{})
 
-	user := User{
-		Name:     "Jinzhu",
-		Age:      18,
-		Birthday: chrono.DateNow(),
-	}
+	user := NewUser()
 
 	result := db.Create(&user)
 
@@ -21,7 +16,7 @@ func TestCreateOne(t *testing.T) {
 		t.Fatal(result.Error)
 	}
 
-	t.Logf("Created user %s", user.ID)
+	t.Logf("Created user %d", user.ID)
 	t.Logf("Rows affected: %d", result.RowsAffected)
 }
 
@@ -29,16 +24,8 @@ func TestCreateMulti(t *testing.T) {
 	db := getMyDB()
 
 	users := []*User{
-		{
-			Name:     "Jinzhu",
-			Age:      18,
-			Birthday: chrono.DateNow(),
-		},
-		{
-			Name:     "Jackson",
-			Age:      19,
-			Birthday: chrono.DateNow(),
-		},
+		NewUserP(),
+		NewUserP(),
 	}
 
 	result := db.Create(users)
@@ -54,19 +41,10 @@ func TestCreateMulti(t *testing.T) {
 func TestCreateMap(t *testing.T) {
 	db := getMyDB()
 
-	db.Model(&User{}).Create(map[string]interface{}{
-		"Name": "jinzhu",
-		"Age":  18,
-	})
+	db.Model(&User{}).Create(NewUserM())
 
 	db.Model(&User{}).Create([]map[string]interface{}{
-		{
-			"Name": "jinzhu_1",
-			"Age":  18,
-		},
-		{
-			"Name": "jinzhu_2",
-			"Age":  20,
-		},
+		NewUserM(),
+		NewUserM(),
 	})
 }

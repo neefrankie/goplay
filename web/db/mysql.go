@@ -1,4 +1,4 @@
-package web
+package db
 
 // To use database/sql, you'll need the package itsel,
 // as well as a driver for the specific database you want to use.

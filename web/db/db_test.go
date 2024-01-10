@@ -1,6 +1,9 @@
-package config
+package db
 
-import "testing"
+import (
+	"goplay/web/config"
+	"testing"
+)
 
 func TestCreator_CreateDB(t *testing.T) {
 	names := []string{
@@ -8,7 +11,7 @@ func TestCreator_CreateDB(t *testing.T) {
 		"entdemo",
 	}
 
-	c := MustNewCreator(MustLoad().GetMySQLConn())
+	c := MustNewCreator(config.MustLoad().GetMySQLConn())
 
 	for _, name := range names {
 		stmt, err := c.CreateDB(name)

@@ -1,8 +1,9 @@
-package config
+package db
 
 import (
 	"database/sql"
 	"fmt"
+	"goplay/web/config"
 	"time"
 
 	"github.com/go-sql-driver/mysql"
@@ -16,7 +17,7 @@ import (
 // Although you can save time.Time by setting Loc: time.UTC and ParseTime: true here,
 // you cannot specify the format used for JSON output.
 // It's better to define your own time types.
-func BuildDSN(c Conn, dbName string) *mysql.Config {
+func BuildDSN(c config.Conn, dbName string) *mysql.Config {
 	return &mysql.Config{
 		User:   c.User,
 		Passwd: c.Pass,
@@ -40,7 +41,7 @@ func BuildDSN(c Conn, dbName string) *mysql.Config {
 }
 
 func MustGetMyDSN(dbName string) string {
-	return BuildDSN(MustLoad().GetMySQLConn(), dbName).FormatDSN()
+	return BuildDSN(config.MustLoad().GetMySQLConn(), dbName).FormatDSN()
 }
 
 // We're loading the driver anonymously, aliasing its
@@ -55,7 +56,7 @@ func MustGetMyDSN(dbName string) string {
 // THe first actual connection to the underlying datastore
 // will be established lazily, when it's needed for the
 // first time.
-func OpenMySQL(c Conn, dbName string) (*sql.DB, error) {
+func OpenMySQL(c config.Conn, dbName string) (*sql.DB, error) {
 
 	db, err := sql.Open("mysql", BuildDSN(c, dbName).FormatDSN())
 	if err != nil {
@@ -83,7 +84,7 @@ func OpenMySQL(c Conn, dbName string) (*sql.DB, error) {
 	return db, nil
 }
 
-func MustOpenMySQL(conn Conn, dbName string) *sql.DB {
+func MustOpenMySQL(conn config.Conn, dbName string) *sql.DB {
 	db, err := OpenMySQL(conn, dbName)
 	if err != nil {
 		panic(err)
@@ -96,7 +97,7 @@ type Creator struct {
 	db *sql.DB
 }
 
-func NewCreator(conn Conn) (Creator, error) {
+func NewCreator(conn config.Conn) (Creator, error) {
 	db, err := OpenMySQL(conn, "")
 	if err != nil {
 		return Creator{}, err
@@ -107,7 +108,7 @@ func NewCreator(conn Conn) (Creator, error) {
 	}, nil
 }
 
-func MustNewCreator(conn Conn) Creator {
+func MustNewCreator(conn config.Conn) Creator {
 	return Creator{
 		db: MustOpenMySQL(conn, ""),
 	}

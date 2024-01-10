@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v6"
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -28,25 +27,39 @@ type Product struct {
 // * CreatedAt, UpdatedAt to track creation, update time.
 
 type User struct {
-	ID           string         `json:"id" gorm:"type:VARCHAR(36);primakeyKey"`
+	gorm.Model
 	Name         string         `json:"name" gorm:"type:VARCHAR(64)"`
 	Email        string         `json:"email" gorm:"type:VARCHAR(64);uniqueIndex"`
 	Age          uint           `json:"age"`
 	Birthday     chrono.Date    `json:"birthday" gorm:"type:DATE"`
 	MemberNumber sql.NullString `json:"memberNumber" gorm:"type:VARCHAR(36)"`
 	ActivateAt   sql.NullTime   `json:"activateAt" gorm:"type:DATETIME(0)"`
-	CreatedAt    time.Time      `json:"createdAt" gorm:"type:DATETIME(0);autoCreateTime"`
-	UpdatedAt    time.Time      `json:"updatedAt" gorm:"type:DATETIME(0);autoUpdateTime"`
-	DeletedAt    gorm.DeletedAt `json:"-" gorm:"type:DATETIME(0);index"`
 }
 
 func NewUser() User {
 	return User{
-		ID:       uuid.New().String(),
 		Name:     gofakeit.Name(),
 		Email:    gofakeit.Email(),
 		Age:      uint(gofakeit.Number(1, 130)),
 		Birthday: chrono.DateNow(),
+	}
+}
+
+func NewUserP() *User {
+	u := NewUser()
+	return &u
+}
+
+func NewUserM() map[string]interface{} {
+	u := NewUser()
+
+	return map[string]interface{}{
+		"Name":      u.Name,
+		"Email":     u.Email,
+		"Age":       u.Age,
+		"Birthday":  u.Birthday,
+		"CreatedAt": time.Now(),
+		"UpdatedAt": time.Now(),
 	}
 }
 

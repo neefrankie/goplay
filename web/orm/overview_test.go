@@ -1,15 +1,8 @@
 package orm
 
 import (
-	"goplay/web/config"
 	"testing"
-
-	"gorm.io/gorm"
 )
-
-func getMyDB() *gorm.DB {
-	return MustNewMySQL(config.MustLoad().GetMySQLConn())
-}
 
 func TestOverfiew(t *testing.T) {
 	db := getMyDB()
