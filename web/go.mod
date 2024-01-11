@@ -5,7 +5,9 @@ go 1.21.5
 require (
 	entgo.io/ent v0.12.5
 	github.com/Masterminds/squirrel v1.5.4
+	github.com/alexedwards/scs/v2 v2.7.0
 	github.com/brianvoe/gofakeit/v6 v6.26.3
+	github.com/casbin/casbin/v2 v2.81.0
 	github.com/doug-martin/goqu/v9 v9.19.0
 	github.com/go-mail/mail v2.3.1+incompatible
 	github.com/go-playground/validator/v10 v10.16.0
@@ -24,7 +26,6 @@ require (
 	ariga.io/atlas v0.14.1-0.20230918065911-83ad451a4935 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
-	github.com/casbin/casbin/v2 v2.81.0 // indirect
 	github.com/casbin/govaluate v1.1.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
