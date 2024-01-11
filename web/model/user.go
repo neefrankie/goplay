@@ -3,6 +3,7 @@ package model
 import (
 	"database/sql"
 	"goplay/web/chrono"
+	"goplay/web/rbac"
 
 	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
@@ -13,7 +14,7 @@ type User struct {
 	Name          string         `gorm:"type:VARCHAR(64)"`
 	Email         string         `gorm:"type:VARCHAR(64);uniqueIndex" validate:"required,email"`
 	Age           uint8          `validate:"gte=0,lte=130"`
-	Role          string         `gorm:"type:VARCHAR(16)"`
+	Role          rbac.Role      `gorm:"type:VARCHAR(16)"`
 	Birthday      chrono.Date    `gorm:"type:DATE"`
 	MemberNumber  sql.NullString `gorm:"type:VARCHAR(36)"`
 	ActivateAt    sql.NullTime   `gorm:"type:DATETIME(0)"`
