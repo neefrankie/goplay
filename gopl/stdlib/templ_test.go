@@ -1,10 +1,10 @@
 package stdlib
 
 import (
+	"html/template"
 	"os"
 	"strings"
 	"testing"
-	"text/template"
 )
 
 type Inventory struct {
@@ -269,5 +269,33 @@ func TestRenderToFile(t *testing.T) {
 	err = r.RenderTo(f, "index.html", &data)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestRenderer_Render(t *testing.T) {
+	type args struct {
+		name string
+		data any
+	}
+	tests := []struct {
+		name    string
+		r       Renderer
+		args    args
+		want    string
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.r.Render(tt.args.name, tt.args.data)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Renderer.Render() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("Renderer.Render() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }
