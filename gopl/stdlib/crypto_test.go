@@ -42,7 +42,7 @@ func TestMD5Sum(t *testing.T) {
 	sum := md5.Sum(data)
 
 	t.Logf("%x\n", sum)
-	t.Logf("%s\n", hex.EncodeToString(sum[:]))
+	t.Logf("%d\n", len(hex.EncodeToString(sum[:])))
 }
 
 func TestSha256String(t *testing.T) {
@@ -70,4 +70,5 @@ func TestSha256File(t *testing.T) {
 func TestSha256Sum(t *testing.T) {
 	sum := sha256.Sum256([]byte("hello world\n"))
 	fmt.Printf("%x\n", sum)
+	fmt.Printf("%d\n", len(hex.EncodeToString(sum[:])))
 }

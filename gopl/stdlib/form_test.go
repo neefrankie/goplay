@@ -2,7 +2,6 @@ package stdlib
 
 import (
 	"fmt"
-	"io"
 	"mime"
 	"mime/multipart"
 	"os"
@@ -27,16 +26,17 @@ func TestCreateFormFile(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		f, err := os.Open("build/" + name)
-		defer f.Close()
-
+		b, err := os.ReadFile("build/" + name)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		io.Copy(part, f)
-	}
+		_, err = part.Write(b)
 
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
 }
 
 func TestParseMediaType(t *testing.T) {
