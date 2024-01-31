@@ -1,7 +1,6 @@
 package stdlib
 
 import (
-	"embed"
 	_ "embed"
 	"io/fs"
 	"os"
@@ -14,11 +13,6 @@ var s string
 //go:embed templates/index.html
 var b []byte
 
-// f contains directory templates
-//
-//go:embed templates
-var f embed.FS
-
 func TestEbmedFileToString(t *testing.T) {
 	print(s)
 }
@@ -28,7 +22,7 @@ func TestEmbedFileToBytes(t *testing.T) {
 }
 
 func TestEmbedFS(t *testing.T) {
-	fs.WalkDir(f, ".", func(path string, d fs.DirEntry, err error) error {
+	fs.WalkDir(templates, ".", func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			t.Fatal(err)
 		}

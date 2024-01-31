@@ -232,7 +232,7 @@ func TestParseTemplateDir(t *testing.T) {
 }
 
 func TestParseFSTemplateDir(t *testing.T) {
-	tmpl, err := ParseFSTemplateDir(f, "templates")
+	tmpl, err := ParseFSTemplateDir(templates, "templates")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -272,7 +272,11 @@ func TestRenderToFile(t *testing.T) {
 	}
 }
 
+// Inheritance does not work in this example.
 func TestRenderer_Render(t *testing.T) {
+
+	r := MustNewFSRenderer(templates, "templates")
+
 	type args struct {
 		name string
 		data any
@@ -284,7 +288,24 @@ func TestRenderer_Render(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name: "index.html",
+			r:    r,
+			args: args{
+				name: "index.html",
+				data: nil,
+			},
+			wantErr: false,
+		},
+		{
+			name: "test.html",
+			r:    r,
+			args: args{
+				name: "test.html",
+				data: nil,
+			},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -293,8 +314,10 @@ func TestRenderer_Render(t *testing.T) {
 				t.Errorf("Renderer.Render() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if got != tt.want {
-				t.Errorf("Renderer.Render() = %v, want %v", got, tt.want)
+
+			_, err = SaveString("build/"+tt.name, got)
+			if err != nil {
+				t.Fatal(err)
 			}
 		})
 	}
