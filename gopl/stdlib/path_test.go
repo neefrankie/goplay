@@ -27,3 +27,13 @@ func TestPathGlob(t *testing.T) {
 
 	t.Logf("%s\n", matches)
 }
+
+func TestPathJoin(t *testing.T) {
+	// a/b/c
+	p1 := path.Join("a", "b", "c")
+	t.Logf("path.Join(): %s\n", p1)
+
+	// a\b\c on Windows.
+	p2 := filepath.Join("a", "b", "c")
+	t.Logf("filepath.Join(): %s\n", p2)
+}

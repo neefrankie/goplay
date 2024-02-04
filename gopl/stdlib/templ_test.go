@@ -1,10 +1,10 @@
 package stdlib
 
 import (
-	"html/template"
 	"os"
 	"strings"
 	"testing"
+	"text/template"
 )
 
 type Inventory struct {
@@ -12,16 +12,12 @@ type Inventory struct {
 	Count    uint
 }
 
-func TestTextTempl(t *testing.T) {
+func TestTemplateTrivial(t *testing.T) {
 	sweaters := Inventory{
 		Material: "wool",
 		Count:    17,
 	}
 
-	// The input text for a template is UTF-8-encoded text in
-	// any format.
-	// Actions are delimited by `{{ }}`.
-	// All text outside actions is copied to the output unchanged.
 	tmpl, err := template.New("test").Parse("{{.Count}} items are made of {{.Material}}")
 
 	if err != nil {
@@ -31,6 +27,76 @@ func TestTextTempl(t *testing.T) {
 	err = tmpl.Execute(os.Stdout, sweaters)
 	if err != nil {
 		t.Error(err)
+	}
+}
+
+// This test shows how the block and define works.
+func TestTemplateBlock(t *testing.T) {
+	master := `Names:
+	{{block "list" .}}
+		{{range .}}
+		{{println "-" .}}
+		{{end}}
+	{{end}}`
+
+	overlay := `{{define "list"}}{{join . ", "}}{{end}}`
+
+	override := `{{define "list"}}Override previous list{{end}}`
+
+	funcs := template.FuncMap{
+		"join": strings.Join,
+	}
+
+	guardians := []string{
+		"Gamora",
+		"Groot",
+		"Nebula",
+		"Rocket",
+		"Star-Lord",
+	}
+
+	masterTmpl, err := template.New("master").Funcs(funcs).Parse(master)
+	if err != nil {
+		t.Error(err)
+	}
+
+	t.Log("\nBlock content\n")
+	err = masterTmpl.Execute(os.Stdout, guardians)
+	if err != nil {
+		t.Error(err)
+	}
+
+	overlayTmpl, err := template.Must(masterTmpl.Clone()).Parse(overlay)
+	if err != nil {
+		t.Error(err)
+	}
+
+	t.Log("\nOverlay content\n")
+	err = overlayTmpl.Execute(os.Stdout, guardians)
+	if err != nil {
+		t.Error(err)
+	}
+
+	// A defined name could only show up once in a parsed *Template.
+	// Later definitions will overide previous definitions.
+	// If you do not intend to override the list defined in overlay,
+	// you should clone it:
+	// overlayTmpl.Clone().Parse(override), or
+	// masterTmpl.Clone().Parse(override)
+	overriddenTmpl, err := overlayTmpl.Parse(override)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log("\nOverridden content\n")
+	err = overriddenTmpl.Execute(os.Stdout, guardians)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Log("\nOverlay is overriden\n")
+	err = overlayTmpl.Execute(os.Stdout, guardians)
+	if err != nil {
+		t.Fatal(err)
 	}
 }
 
@@ -167,158 +233,5 @@ func TestTmplLetter(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-	}
-}
-
-func TestTmplBlock(t *testing.T) {
-	master := `Names:{{block "list" .}}{{"\n"}}{{range .}}{{println "-" .}}{{end}}{{end}}`
-	overlay := `{{define "list"}}{{join . ", "}}{{end}}`
-	funcs := template.FuncMap{
-		"join": strings.Join,
-	}
-	guardians := []string{
-		"Gamora",
-		"Groot",
-		"Nebula",
-		"Rocket",
-		"Star-Lord",
-	}
-
-	masterTmpl, err := template.New("master").Funcs(funcs).Parse(master)
-	if err != nil {
-		t.Error(err)
-	}
-
-	overlayTmpl, err := template.Must(masterTmpl.Clone()).Parse(overlay)
-	if err != nil {
-		t.Error(err)
-	}
-
-	err = masterTmpl.Execute(os.Stdout, guardians)
-	if err != nil {
-		t.Error(err)
-	}
-
-	err = overlayTmpl.Execute(os.Stdout, guardians)
-	if err != nil {
-		t.Error(err)
-	}
-}
-
-type TemplateData struct {
-	SITENAME string
-	SITEURL  string
-}
-
-var data = TemplateData{
-	SITENAME: "Theory and Practice",
-	SITEURL:  "https://siongui.github.io/",
-}
-
-func TestParseTemplateDir(t *testing.T) {
-
-	tmpl, err := ParseTemplateDir("templates")
-	if err != nil {
-		t.Error(err)
-	}
-
-	t.Logf("%s\n", tmpl.DefinedTemplates())
-	t.Logf("%s\n", tmpl.Name())
-
-	err = tmpl.ExecuteTemplate(os.Stdout, "index.html", &data)
-	if err != nil {
-		t.Error(err)
-	}
-}
-
-func TestParseFSTemplateDir(t *testing.T) {
-	tmpl, err := ParseFSTemplateDir(templates, "templates")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	t.Logf("%s\n", tmpl.DefinedTemplates())
-	t.Logf("%s\n", tmpl.Name())
-
-	err = tmpl.ExecuteTemplate(os.Stdout, "index.html", &data)
-	if err != nil {
-		t.Error(err)
-	}
-}
-
-func TestRender(t *testing.T) {
-	r := MustNewRenderer("./templates")
-
-	h, err := r.Render("index.html", &data)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	t.Logf("%s\n", h)
-}
-
-func TestRenderToFile(t *testing.T) {
-	r := MustNewRenderer("./templates")
-
-	f, err := os.Create("build/index.html")
-	defer f.Close()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	err = r.RenderTo(f, "index.html", &data)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
-
-// Inheritance does not work in this example.
-func TestRenderer_Render(t *testing.T) {
-
-	r := MustNewFSRenderer(templates, "templates")
-
-	type args struct {
-		name string
-		data any
-	}
-	tests := []struct {
-		name    string
-		r       Renderer
-		args    args
-		want    string
-		wantErr bool
-	}{
-		{
-			name: "index.html",
-			r:    r,
-			args: args{
-				name: "index.html",
-				data: nil,
-			},
-			wantErr: false,
-		},
-		{
-			name: "test.html",
-			r:    r,
-			args: args{
-				name: "test.html",
-				data: nil,
-			},
-			wantErr: false,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := tt.r.Render(tt.args.name, tt.args.data)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Renderer.Render() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-
-			_, err = SaveString("build/"+tt.name, got)
-			if err != nil {
-				t.Fatal(err)
-			}
-		})
 	}
 }
