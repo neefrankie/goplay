@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"example.com/gopl/ch5/links"
+	"example.com/gopl/func/links"
 )
 
 var tokens = make(chan struct{}, 20)
