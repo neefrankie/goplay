@@ -7,24 +7,18 @@ import (
 	"os"
 )
 
+// Netcat1 is a read-only TCP client.
+// Thie program reads data from the connection and writes it to the standared output
+// until an end-of-file condition or an error occurs.
 func main() {
 	conn, err := net.Dial("tcp", "localhost:8000")
 	if err != nil {
 		log.Fatal(err)
 	}
-	done := make(chan struct{})
 
-	// Read and print the server's response.
-	go func() {
-		io.Copy(os.Stdout, conn)
-		log.Println("done")
-		done <- struct{}{}
-	}()
-
+	defer conn.Close()
 	// Reads the standard input and sends it to the server.
-	mustCopy(conn, os.Stdin)
-	conn.Close()
-	<-done
+	mustCopy(os.Stdout, conn)
 }
 
 func mustCopy(dst io.Writer, src io.Reader) {
