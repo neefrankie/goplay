@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"io/fs"
 	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -44,6 +45,18 @@ func TestFsWalkDir(t *testing.T) {
 			t.Fatal(err)
 		}
 		t.Logf("%s | Is dir: %t\n", path, d.IsDir())
+		return nil
+	})
+}
+
+func TestWalkDir(t *testing.T) {
+	filepath.WalkDir("templates", func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		t.Logf("%s\n", path)
+
 		return nil
 	})
 }
