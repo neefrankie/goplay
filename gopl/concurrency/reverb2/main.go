@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"example.com/gopl/concurrency"
+	"gopl/concurrency"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-module example.com/gopl
+module gopl
 
 go 1.20
 

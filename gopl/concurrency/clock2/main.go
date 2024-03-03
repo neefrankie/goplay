@@ -4,7 +4,7 @@ import (
 	"log"
 	"net"
 
-	"example.com/gopl/concurrency"
+	"gopl/concurrency"
 )
 
 // A sequential clock server that writes the current time to the client once persecond.

@@ -6,7 +6,7 @@ import (
 	"net"
 	"os"
 
-	"example.com/gopl/concurrency"
+	"gopl/concurrency"
 )
 
 func main() {

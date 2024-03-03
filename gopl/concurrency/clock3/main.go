@@ -5,7 +5,7 @@ import (
 	"net"
 	"os"
 
-	"example.com/gopl/concurrency"
+	"gopl/concurrency"
 )
 
 // clock3 accepts a port number from command line argument.
