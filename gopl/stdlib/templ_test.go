@@ -235,3 +235,24 @@ func TestTmplLetter(t *testing.T) {
 		}
 	}
 }
+
+func TestTemplFile(t *testing.T) {
+	tmpl, err := template.ParseFiles("templates/layout/layout.html", "templates/index.html")
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	t.Log("Default render: \n")
+	tmpl.Execute(os.Stdout, nil)
+
+	t.Log("Render content: \n")
+	tmpl.ExecuteTemplate(os.Stdout, "content", nil)
+
+	t.Log("Render index.html\n")
+	tmpl.ExecuteTemplate(os.Stdout, "index.html", nil)
+
+	t.Logf("\n%s\n", tmpl.DefinedTemplates())
+	// Name is the file name of the first template.
+	t.Logf("%s\n", tmpl.Name())
+}
