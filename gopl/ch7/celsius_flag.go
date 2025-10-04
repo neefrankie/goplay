@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 
-	"example.com/gopl/ch2"
+	"gopl/ch2"
 )
 
 type celsiusFlag struct {
