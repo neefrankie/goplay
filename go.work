@@ -2,10 +2,7 @@ go 1.25.1
 
 use (
 	./algorithms
-	./dump
-	./gin
 	./gopl
-	./hello
 	./html
 	./ormplay
 	./pongo
