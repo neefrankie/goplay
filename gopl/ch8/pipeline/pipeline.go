@@ -1,8 +1,32 @@
-package main
+package pipeline
 
 import "fmt"
 
-func main() {
+func Pipeline1() {
+	naturals := make(chan int)
+	squares := make(chan int)
+
+	// Counter
+	go func() {
+		for x := 0; ; x++ {
+			naturals <- x
+		}
+	}()
+
+	// Squarer
+	go func() {
+		for {
+			x := <-naturals
+			squares <- x * x
+		}
+	}()
+
+	for {
+		fmt.Println(<-squares)
+	}
+}
+
+func Pipeline2() {
 	naturals := make(chan int)
 	squares := make(chan int)
 

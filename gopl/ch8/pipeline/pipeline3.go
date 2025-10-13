@@ -1,4 +1,4 @@
-package main
+package pipeline
 
 import "fmt"
 
@@ -22,7 +22,7 @@ func printer(in <-chan int) {
 	}
 }
 
-func main() {
+func Pipeline3() {
 	naturals := make(chan int)
 	squares := make(chan int)
 
