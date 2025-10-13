@@ -1,6 +1,7 @@
 package stdlib
 
 import (
+	"os"
 	"path"
 	"path/filepath"
 	"testing"
@@ -37,4 +38,10 @@ func TestPathJoin(t *testing.T) {
 	// a\b\c on Windows.
 	p2 := filepath.Join("a", "b", "c")
 	t.Logf("filepath.Join(): %s\n", p2)
+}
+
+func TestExpandHome(t *testing.T) {
+	p := os.ExpandEnv("$HOME/datasource")
+
+	t.Logf("ExpandHome(): %s\n", p)
 }
