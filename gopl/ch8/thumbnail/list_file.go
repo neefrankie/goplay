@@ -2,6 +2,7 @@ package thumbnail
 
 import (
 	"io/fs"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -71,4 +72,38 @@ func ListFiles(dir string) ([]string, error) {
 	}
 
 	return paths, nil
+}
+
+func listFilesAsync(dir string) <-chan string {
+
+	ch := make(chan string)
+
+	go func() {
+		absDir, err := ExpandPath(dir)
+		if err != nil {
+			log.Printf("error: %s", err)
+			return
+		}
+
+		err = filepath.WalkDir(absDir, func(path string, d fs.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+
+			if strings.HasPrefix(d.Name(), ".") {
+				return nil
+			}
+
+			if !d.IsDir() {
+				ch <- path
+			}
+
+			return nil
+		})
+		if err != nil {
+			log.Printf("error: %", err)
+		}
+	}()
+
+	return ch
 }
