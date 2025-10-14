@@ -1,4 +1,14 @@
 ch8_cmd := ch8/cmd
+ch5_cmd := ch5/cmd
+
+.PHONY: findlinks1
+findlinks1:
+	go build -o build/findlinks1 $(ch5_cmd)/findlinks1/main.go
+
+.PHONY: findlinksr
+findlinksr:
+	go build -o build/findlinksr $(ch5_cmd)/findlinksr/main.go
+
 
 .PHONY: clock1
 clock1:
