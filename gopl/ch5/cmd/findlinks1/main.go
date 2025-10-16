@@ -1,7 +1,7 @@
 package main
 
-import "gopl/ch5/links"
+import "gopl/ch5"
 
 func main() {
-	links.Findlinks1()
+	ch5.Findlinks1()
 }

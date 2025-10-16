@@ -1,4 +1,4 @@
-package outline
+package ch5
 
 import (
 	"fmt"
@@ -17,17 +17,6 @@ func Outline(stack []string, n *html.Node) {
 		// 第一层循环时传入的始终是最初的 stack
 		// stack只在递归内部修改
 		Outline(stack, c)
-	}
-}
-
-// CountNodeNames implements exercise 5.2s
-func CountNodeNames(counter map[string]int, n *html.Node) {
-	if n.Type == html.ElementNode {
-		counter[n.Data]++
-	}
-
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		CountNodeNames(counter, c)
 	}
 }
 

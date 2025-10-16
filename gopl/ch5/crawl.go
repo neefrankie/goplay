@@ -1,4 +1,4 @@
-package lib
+package ch5
 
 import (
 	"net/http"

@@ -1,7 +1,9 @@
 package main
 
-import "gopl/ch5/links"
+import (
+	"gopl/ch5"
+)
 
 func main() {
-	links.FindLinksRecur()
+	ch5.FindLinksRecur()
 }

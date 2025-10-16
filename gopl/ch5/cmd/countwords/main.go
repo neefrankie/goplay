@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	"gopl/ch5/links"
+	"gopl/ch5"
 	"os"
 )
 
 func main() {
 	for _, url := range os.Args[1:] {
-		words, images, err := links.CountWordsAndImages(url)
+		words, images, err := ch5.CountWordsAndImages(url)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "countWordsAndImages: %v\n", err)
 		}

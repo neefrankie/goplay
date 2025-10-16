@@ -1,12 +1,11 @@
 package main
 
 import (
-	"gopl/ch5/lib"
-	"gopl/ch5/outline"
+	"gopl/ch5"
 )
 
 func main() {
-	doc := lib.MustCrawlAndParse("http://127.0.0.1:5000")
+	doc := ch5.MustCrawlAndParse("http://127.0.0.1:5000")
 
-	outline.Outline(nil, doc)
+	ch5.Outline(nil, doc)
 }

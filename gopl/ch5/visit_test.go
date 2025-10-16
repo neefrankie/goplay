@@ -1,4 +1,4 @@
-package links
+package ch5_test
 
 import (
 	"bufio"

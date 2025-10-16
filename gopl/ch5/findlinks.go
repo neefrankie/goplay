@@ -1,8 +1,7 @@
-package links
+package ch5
 
 import (
 	"fmt"
-	"gopl/ch5/lib"
 	"net/http"
 	"os"
 
@@ -12,7 +11,7 @@ import (
 func Findlinks1() {
 	url := os.Args[1]
 
-	doc := lib.MustCrawlAndParse(url)
+	doc := MustCrawlAndParse(url)
 
 	for _, link := range visit(nil, doc) {
 		fmt.Println(link)
@@ -22,7 +21,7 @@ func Findlinks1() {
 func FindLinksRecur() {
 	url := os.Args[1]
 
-	doc := lib.MustCrawlAndParse(url)
+	doc := MustCrawlAndParse(url)
 
 	for _, link := range visitRecur(nil, doc) {
 		fmt.Println(link)
@@ -32,7 +31,7 @@ func FindLinksRecur() {
 func FindLinksAll() {
 	url := os.Args[1]
 
-	doc := lib.MustCrawlAndParse(url)
+	doc := MustCrawlAndParse(url)
 
 	for _, link := range visit2(nil, doc) {
 		fmt.Println(link)
