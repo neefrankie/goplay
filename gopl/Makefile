@@ -33,6 +33,14 @@ findlinks2:
 countwords:
 	go build -o build/countwords $(ch5_cmd)/countwords/main.go
 
+.PHONY: outline2
+outline2:
+	go build -o build/outline2 $(ch5_cmd)/outline2/main.go
+
+.PHONY: findid
+findid:
+	go build -o build/findid $(ch5_cmd)/findid/main.go
+
 .PHONY: clock1
 clock1:
 	go build -o build/clock1 $(ch8_cmd)/clock1/main.go
