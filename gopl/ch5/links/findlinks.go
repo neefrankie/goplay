@@ -2,6 +2,7 @@ package links
 
 import (
 	"fmt"
+	"gopl/ch5/lib"
 	"net/http"
 	"os"
 
@@ -11,7 +12,7 @@ import (
 func Findlinks1() {
 	url := os.Args[1]
 
-	doc := crawlAndParse(url)
+	doc := lib.MustCrawlAndParse(url)
 
 	for _, link := range visit(nil, doc) {
 		fmt.Println(link)
@@ -21,27 +22,56 @@ func Findlinks1() {
 func FindLinksRecur() {
 	url := os.Args[1]
 
-	doc := crawlAndParse(url)
+	doc := lib.MustCrawlAndParse(url)
 
 	for _, link := range visitRecur(nil, doc) {
 		fmt.Println(link)
 	}
 }
 
-func crawlAndParse(url string) *html.Node {
+func FindLinksAll() {
+	url := os.Args[1]
+
+	doc := lib.MustCrawlAndParse(url)
+
+	for _, link := range visit2(nil, doc) {
+		fmt.Println(link)
+	}
+}
+
+func FindLinks2(url string) ([]string, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "findlinks1: %v\n", err)
-		os.Exit(1)
+		return nil, err
 	}
 
-	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		resp.Body.Close()
+		return nil, fmt.Errorf("getting %s: %s", url, resp.Status)
+	}
 
 	doc, err := html.Parse(resp.Body)
+	resp.Body.Close()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "findlinks1: %vn", err)
-		os.Exit(1)
+		return nil, fmt.Errorf("parsing %s as HTML: %v", url, err)
 	}
 
-	return doc
+	return visit(nil, doc), nil
+}
+
+func CountWordsAndImages(url string) (words, images int, err error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return
+	}
+
+	doc, err := html.Parse(resp.Body)
+	resp.Body.Close()
+	if err != nil {
+		err = fmt.Errorf("parsing HTML: %s", err)
+		return
+	}
+
+	words, images = countWordsAndImages(doc)
+	return
 }

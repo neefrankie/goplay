@@ -9,6 +9,29 @@ findlinks1:
 findlinksr:
 	go build -o build/findlinksr $(ch5_cmd)/findlinksr/main.go
 
+.PHONY: outline
+outline:
+	go build -o build/outline $(ch5_cmd)/outline/main.go
+
+.PHONY: countname
+countname:
+	go build -o build/countname $(ch5_cmd)/countname/main.go
+
+.PHONY: showtext
+showtext:
+	go build -o build/showtext $(ch5_cmd)/showtext/main.go
+
+.PHONY: findlinksall
+findlinksall:
+	go build -o build/findlinksall $(ch5_cmd)/findlinksall/main.go
+
+.PHONY: findlinks2
+findlinks2:
+	go build -o build/findlinks2 $(ch5_cmd)/findlinks2/main.go
+
+.PHONY: countwords
+countwords:
+	go build -o build/countwords $(ch5_cmd)/countwords/main.go
 
 .PHONY: clock1
 clock1:
