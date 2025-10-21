@@ -41,6 +41,10 @@ outline2:
 findid:
 	go build -o build/findid $(ch5_cmd)/findid/main.go
 
+.PHONY: findlinks3
+findlinks3:
+	go build -o build/findlinks3 $(ch5_cmd)/findlinks3/main.go
+
 .PHONY: clock1
 clock1:
 	go build -o build/clock1 $(ch8_cmd)/clock1/main.go
