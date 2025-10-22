@@ -17,3 +17,14 @@ type User struct {
 	UpdatedAt    time.Time
 	ignored      string
 }
+
+type Author struct {
+	Name  string
+	Email string
+}
+
+type Blog struct {
+	Author
+	ID      int
+	Upvotes int32
+}
