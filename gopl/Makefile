@@ -45,6 +45,18 @@ findid:
 findlinks3:
 	go build -o build/findlinks3 $(ch5_cmd)/findlinks3/main.go
 
+.PHONY: toposort
+toposort:
+	go build -o build/toposort $(ch5_cmd)/toposort/main.go
+
+.PHONY: toposort1
+toposort1:
+	go build -o build/toposort1 $(ch5_cmd)/toposort1/main.go
+
+.PHONY: toposort2
+toposort2:
+	go build -o build/toposort2 $(ch5_cmd)/toposort2/main.go
+
 .PHONY: clock1
 clock1:
 	go build -o build/clock1 $(ch8_cmd)/clock1/main.go
